@@ -1,0 +1,7 @@
+# Copy to ~/.gitconfig-work (not committed — real name/email/key go here).
+# Applies automatically to anything cloned under ~/workspace/work/, via the
+# includeIf in git/gitconfig.
+[user]
+	name = Your Work Name
+	email = you@work-email.example
+	signingKey = ~/.ssh/tempo_id_rsa

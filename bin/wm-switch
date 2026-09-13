@@ -1,0 +1,50 @@
+#!/usr/bin/env zsh
+# wm-switch [filter] — pick a worktree across every repo and jump to its tmux target.
+# An unambiguous filter skips the picker, so it is usable from keybinds and scripts.
+set -uo pipefail
+
+die() {
+  print -u2 -- "wm-switch: $1"
+  [[ -n "${TMUX:-}" ]] && tmux display-message -d 4000 "wm-switch: $1"
+  exit 1
+}
+
+# `--all` only reports repos that have tracked agents, so it is a supplement to
+# this repo's own list, never a replacement for it.
+here=$(workmux list --json 2>/dev/null) || here="[]"
+elsewhere=$(workmux list --json --all 2>/dev/null) || elsewhere="[]"
+json=$(jq -s 'add | unique_by(.project_path + "\u0000" + .handle)' \
+  <(print -r -- "${here:-[]}") <(print -r -- "${elsewhere:-[]}") 2>/dev/null) \
+  || die "could not merge worktree lists"
+[[ -n "$json" && "$json" != "[]" ]] || die "no worktrees"
+
+rows=$(print -r -- "$json" | jq -r '
+  .[] | [
+    .handle,
+    .project_path,
+    .project,
+    .branch,
+    (if .is_open then "open" else "-" end),
+    (if .has_uncommitted_changes then "dirty" else "clean" end),
+    ((.agent_statuses // []) | map(.status) | join(",") | if . == "" then "-" else . end)
+  ] | @tsv') || die "could not parse worktree list"
+
+if (( $# )); then
+  match=$(print -r -- "$rows" | awk -F'\t' -v q="$1" '$1 == q')
+  [[ -z "$match" ]] && match=$(print -r -- "$rows" | awk -F'\t' -v q="$1" 'index($1, q)')
+  [[ -n "$match" ]] || die "no worktree matches '$1'"
+  [[ $(print -r -- "$match" | wc -l) -eq 1 ]] || die "'$1' is ambiguous"
+  line="$match"
+else
+  command -v fzf >/dev/null || die "fzf is not installed"
+  line=$(print -r -- "$rows" \
+    | awk -F'\t' '{printf "%s\t%s\t%-22s %-14s %-26s %-6s %-6s %s\n", $1, $2, $3, $1, $4, $5, $6, $7}' \
+    | fzf --delimiter='\t' --with-nth=3 --prompt='worktree> ' --height=100% --border --no-multi) || exit 1
+fi
+
+handle=$(print -r -- "$line" | cut -f1)
+ppath=$(print -r -- "$line" | cut -f2)
+[[ -n "$handle" ]] || die "empty selection"
+
+[[ -d "$ppath" ]] && builtin cd "$ppath"
+exec workmux open "$handle"

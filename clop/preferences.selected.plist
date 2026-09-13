@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoCopyToClipboard</key>
+	<true/>
+	<key>enableClipboardOptimiser</key>
+	<true/>
+	<key>formatsToConvertToJPEG</key>
+	<array>
+		<string>{"constantIndex":70,"identifier":"org.webmproject.webp"}</string>
+		<string>"public.avif"</string>
+		<string>{"constantIndex":62,"identifier":"com.microsoft.bmp"}</string>
+		<string>{"constantIndex":68,"identifier":"public.heic"}</string>
+	</array>
+	<key>formatsToConvertToMP4</key>
+	<array>
+		<string>{"constantIndex":85,"identifier":"public.mpeg"}</string>
+		<string>{"constantIndex":86,"identifier":"public.mpeg-2-video"}</string>
+		<string>{"constantIndex":84,"identifier":"com.apple.quicktime-movie"}</string>
+		<string>"org.webmproject.webm"</string>
+	</array>
+	<key>formatsToConvertToPNG</key>
+	<array>
+		<string>{"constantIndex":58,"identifier":"public.tiff"}</string>
+	</array>
+	<key>imageDirs</key>
+	<array>
+		<string>/Users/osmarpetry/Desktop</string>
+		<string>/Users/osmarpetry/Downloads</string>
+	</array>
+	<key>optimiseImagePathClipboard</key>
+	<true/>
+	<key>optimiseVideoClipboard</key>
+	<true/>
+	<key>targetVideoFPS</key>
+	<real>30.0</real>
+	<key>useAggressiveOptimisationMP4</key>
+	<true/>
+	<key>useCPUIntensiveEncoder</key>
+	<true/>
+	<key>videoDirs</key>
+	<array>
+		<string>/Users/osmarpetry/Movies</string>
+		<string>/Users/osmarpetry/Downloads</string>
+		<string>/Users/osmarpetry/Desktop</string>
+	</array>
+	<key>videoFormatsToSkip</key>
+	<array>
+		<string>"com.apple.m4v-video"</string>
+		<string>"org.matroska.mkv"</string>
+	</array>
+	<key>workdirCleanupInterval</key>
+	<string>604800</string>
+</dict>
+</plist>

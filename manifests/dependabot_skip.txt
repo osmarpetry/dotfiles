@@ -1,0 +1,24 @@
+# Repos dependabot must leave alone. Regenerate the archived ones with:
+#   gh repo list osmarpetry --limit 200 --json name,isArchived \
+#     --jq '.[] | select(.isArchived) | .name'
+
+# archived: read-only, dependabot cannot open a pull request
+CustomMuiDrawer
+bater-horas2
+bootstrap-resposive-site
+fotograf
+hello-go
+horas
+infractions-hawaii
+personal-blog-gatsby-trash
+quizzler-flutter
+react-hook-ts-poc
+ritchie-workshop
+storybook-class
+tcc-catolica
+themis
+todo
+twitter-bot
+
+# no remote yet
+roast-full

@@ -1,0 +1,492 @@
+#!/usr/bin/env zsh
+# dx - man pages, docs versionados e alerta de upgrade, tudo em cache local.
+set -euo pipefail
+
+DX_HOME="${0:A:h}"
+[[ -r "$DX_HOME/core.zsh" ]] || DX_HOME="$HOME/.local/share/dx"
+source "$DX_HOME/core.zsh"
+
+DX_CACHE="${DX_CACHE:-$HOME/.cache/dx}"
+DX_HELP="$DX_CACHE/help"
+DX_DOCS="$DX_CACHE/docs"
+DX_EOL="$DX_CACHE/eol"
+DX_INDEX="$DX_CACHE/man-index.tsv"
+
+die() { print -ru2 -- "dx: $*"; exit 1 }
+note() { print -ru2 -- "  $*" }
+
+# Run a command with a hard time limit (perl ships with macOS).
+dx_limited() { perl -e 'alarm shift; exec @ARGV' "$@" }
+
+# Page only when writing to a terminal, so pipes and agents get plain text.
+dx_page() { if [[ -t 1 ]]; then ${=PAGER:-less -R}; else cat; fi }
+
+# ---------------------------------------------------------------- projeto ----
+
+# Nearest directory above $PWD holding a given manifest.
+dx_find_up() {
+  local file="$1" d="${2:-$PWD}"
+  while [[ "$d" != / && -n "$d" ]]; do
+    [[ -f "$d/$file" ]] && { print -r -- "$d/$file"; return }
+    d="${d:h}"
+  done
+  return 1
+}
+
+dx_project_root() {
+  local m
+  m=$(dx_find_up package.json) || m=$(dx_find_up pyproject.toml) || m=$(dx_find_up .git) || return 1
+  print -r -- "${m:h}"
+}
+
+# Version a project actually uses for a registry slug. Honours .dx.json pins.
+dx_detect_version() {
+  local slug="$1" detect pin root manifest raw
+  detect=$(dx_registry_field "$slug" detect)
+  [[ -z "$detect" ]] && return
+
+  root=$(dx_project_root) || root=""
+  if [[ -n "$root" && -f "$root/.dx.json" ]]; then
+    pin=$(jq -r --arg s "$slug" '.[$s] // empty' "$root/.dx.json" 2>/dev/null)
+    [[ -n "$pin" ]] && { print -r -- "$pin"; return }
+  fi
+
+  case "$detect" in
+    npm:*)
+      manifest=$(dx_find_up package.json) || return
+      raw=$(jq -r --arg p "${detect#npm:}" \
+        '((.dependencies//{}) + (.devDependencies//{}) + (.peerDependencies//{}))[$p] // empty' \
+        "$manifest" 2>/dev/null)
+      ;;
+    pypi:*)
+      manifest=$(dx_find_up pyproject.toml) || return
+      raw=$(grep -oE "^[[:space:]]*[\"']?${detect#pypi:}[\"']?[[:space:]]*[=~>]+[[:space:]]*[\"']?[0-9][0-9.]*" \
+        "$manifest" 2>/dev/null | grep -oE '[0-9][0-9.]*$' | head -1)
+      ;;
+    runtime:node)
+      manifest=$(dx_find_up .nvmrc) || manifest=$(dx_find_up .node-version) || manifest=""
+      if [[ -n "$manifest" ]]; then
+        raw=$(<"$manifest")
+      else
+        manifest=$(dx_find_up package.json) \
+          && raw=$(jq -r '.engines.node // empty' "$manifest" 2>/dev/null) || raw=""
+        [[ -z "$raw" && -z "${DX_STRICT:-}" ]] && raw=$(node -v 2>/dev/null)
+      fi
+      ;;
+    runtime:python)
+      manifest=$(dx_find_up .python-version) || manifest=""
+      if [[ -n "$manifest" ]]; then
+        raw=$(<"$manifest")
+      else
+        manifest=$(dx_find_up pyproject.toml) \
+          && raw=$(grep -oE '^requires-python[^0-9]*[0-9]+\.[0-9]+' "$manifest" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+$') || raw=""
+        [[ -z "$raw" && -z "${DX_STRICT:-}" ]] && raw=$(python3 -V 2>&1 | awk '{print $2}')
+      fi
+      ;;
+    runtime:go)
+      manifest=$(dx_find_up go.mod) \
+        && raw=$(awk '/^go /{print $2; exit}' "$manifest" 2>/dev/null) || raw=""
+      [[ -z "$raw" && -z "${DX_STRICT:-}" ]] && raw=$(go version 2>/dev/null | awk '{print $3}')
+      ;;
+    cmd:*)
+      local tool="${detect#cmd:}"
+      command -v "$tool" >/dev/null || return
+      raw=$(dx_limited 5 "$tool" --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
+      ;;
+  esac
+  dx_clean_version "${raw:-}"
+}
+
+# ------------------------------------------------------------------- L1 ------
+
+dx_index_build() {
+  mkdir -p "$DX_CACHE" "$DX_HELP"
+  local tmp="$DX_INDEX.tmp"
+
+  note "indexando man pages..."
+  apropos . 2>/dev/null \
+    | sed -E 's/^([^(]+)\(([^)]+)\)[^-]*- ?(.*)$/\1\t\2\t\3/' \
+    | awk -F'\t' 'NF==3 && $1 !~ /,/ {gsub(/ +$/,"",$1); print $1"\t"$2"\t"$3}' \
+    | sort -u > "$tmp"
+  local n_man=$(wc -l < "$tmp" | tr -d ' ')
+
+  note "capturando --help dos CLIs sem man..."
+  # Um binario que trava ou explode nao pode abortar o indice inteiro.
+  setopt local_options no_err_exit
+  local dirs=(/opt/homebrew/bin "$HOME/.local/bin" "$HOME/go/bin" "$HOME/Library/pnpm" /usr/local/bin)
+  local d f tool out n_help=0
+
+  # Alguns binarios escrevem no diretorio atual mesmo com --help (ex: patcheck,
+  # do ffmpeg, cria cvelist e patcheck.tmp). Captura roda num diretorio descartavel.
+  local scratch prevpwd="$PWD"
+  scratch=$(mktemp -d "${TMPDIR:-/tmp}/dx-help.XXXXXX")
+  builtin cd -q "$scratch"
+
+  for d in $dirs; do
+    [[ -d "$d" ]] || continue
+    for f in "$d"/*(N-*); do
+      tool="${f:t}"
+      man -w "$tool" >/dev/null 2>&1 && continue
+      out="$DX_HELP/$tool.txt"
+      if [[ ! -s "$out" || -z "$(find "$out" -mtime -7 2>/dev/null)" ]]; then
+        dx_limited 6 "$f" --help </dev/null >"$out" 2>&1
+        [[ -s "$out" ]] || dx_limited 6 "$f" help </dev/null >"$out" 2>&1
+      fi
+      if [[ -s "$out" ]]; then
+        printf '%s\thelp\t%s\n' "$tool" \
+          "$(head -3 "$out" | tr '\n\t' '  ' | cut -c1-90)" >> "$tmp"
+        (( n_help++ ))
+      else
+        rm -f "$out"
+      fi
+    done
+  done
+
+  builtin cd -q "$prevpwd"
+  rm -rf "$scratch"
+
+  sort -u "$tmp" -o "$tmp"
+  mv "$tmp" "$DX_INDEX"
+  note "$n_man man + $n_help --help indexados"
+}
+
+dx_man() {
+  [[ "${1:-}" == (-r|--refresh) ]] && { dx_index_build; return }
+  [[ -f "$DX_INDEX" ]] || dx_index_build
+
+  local pick="${1:-}"
+  if [[ -z "$pick" ]]; then
+    pick=$(awk -F'\t' '{printf "%-28s %-6s %s\n", $1, $2, $3}' "$DX_INDEX" \
+      | fzf --prompt='man/help> ' --height=80% --border \
+            --preview="$DX_HOME/dx man-show {1}" --preview-window=right:60%:wrap) || return 0
+    pick="${pick%% *}"
+  fi
+  dx_man_show "$pick" | dx_page
+}
+
+dx_man_show() {
+  local tool="$1"
+  if man -w "$tool" >/dev/null 2>&1; then
+    MANWIDTH=100 man "$tool" 2>/dev/null | col -bx
+  elif [[ -f "$DX_HELP/$tool.txt" ]]; then
+    print -r -- "# $tool --help (cache: $(date -r "$DX_HELP/$tool.txt" '+%F'))"
+    print -r -- ""
+    cat "$DX_HELP/$tool.txt"
+  else
+    print -r -- "sem man nem --help em cache para '$tool'"
+  fi
+}
+
+# ------------------------------------------------------------------- L2 ------
+
+dx_tags() {
+  local repo="$1"
+  git ls-remote --tags --refs "https://github.com/$repo.git" 2>/dev/null \
+    | awk -F/ '{print $NF}'
+}
+
+# Commit sha closest to (and not after) a date, for repos without tags.
+dx_sha_at_date() {
+  local repo="$1" when="$2"
+  gh api "repos/$repo/commits?until=${when}T23:59:59Z&per_page=1" --jq '.[0].sha' 2>/dev/null
+}
+
+# Publish date of an npm version, used by the `date` strategy.
+dx_npm_date() {
+  local pkg="$1" ver="$2"
+  npm view "$pkg@$ver" time --json 2>/dev/null | jq -r --arg v "$ver" '.[$v] // empty' | cut -c1-10
+}
+
+# Ref ja baixado para esta versao, achado sem tocar na rede.
+dx_cached_ref() {
+  local slug="$1" want="$2" d
+  for d in "$DX_DOCS/$slug"/*(N/); do
+    [[ -f "$d/.dx-version" && "$(<"$d/.dx-version")" == "$want" ]] && { print -r -- "${d:t}"; return }
+  done
+  return 1
+}
+
+# Versoes deste slug disponiveis offline, para a mensagem de erro ser acionavel.
+dx_cached_versions() {
+  local slug="$1" d out=()
+  for d in "$DX_DOCS/$slug"/*(N/); do
+    [[ -f "$d/.dx-version" ]] && out+=("$(<"$d/.dx-version")")
+  done
+  (( ${#out} )) && print -r -- "${(j:, :)out}" || print -r -- "(nenhuma)"
+}
+
+# Release date of a version, so tag-less doc repos can be pinned by commit date.
+dx_release_date() {
+  local slug="$1" want="$2" datesrc detect tag out
+  datesrc=$(dx_registry_field "$slug" datesrc)
+  if [[ -n "$datesrc" && "$datesrc" != "-" ]]; then
+    tag=$(dx_pick_tag "$want" "$(dx_tags "$datesrc")")
+    if [[ -n "$tag" ]]; then
+      out=$(gh api "repos/$datesrc/releases/tags/$tag" --jq '.published_at' 2>/dev/null) \
+        || out=$(gh api "repos/$datesrc/commits/$tag" --jq '.commit.committer.date' 2>/dev/null) || out=""
+      [[ -n "$out" ]] && { print -r -- "${out:0:10}"; return }
+    fi
+  fi
+  detect=$(dx_registry_field "$slug" detect)
+  [[ "$detect" == npm:* ]] && dx_npm_date "${detect#npm:}" "$want"
+}
+
+dx_doc_fetch() {
+  local slug="$1" want="$2" repo subdir strategy ref dest detect when
+  repo=$(dx_registry_field "$slug" repo)   || true
+  subdir=$(dx_registry_field "$slug" subdir) || true
+  strategy=$(dx_registry_field "$slug" strategy) || true
+  [[ -z "$repo" ]] && die "slug desconhecido: $slug (veja: dx ls)"
+
+  # Cache primeiro: numa maquina sem rede o doc ja baixado tem de responder.
+  ref=$(dx_cached_ref "$slug" "$want") || ref=""
+  if [[ -n "$ref" ]]; then
+    print -r -- "$DX_DOCS/$slug/$ref/$subdir"
+    return
+  fi
+
+  if [[ -n "${DX_OFFLINE:-}" ]]; then
+    print -ru2 -- "dx: '$slug $want' nao esta no cache e DX_OFFLINE esta ligado."
+    print -ru2 -- "    em cache: $(dx_cached_versions "$slug")"
+    print -ru2 -- "    peca ao responsavel: dx seed $slug@$want (numa maquina com rede)"
+    exit 3
+  fi
+
+  case "$strategy" in
+    tag)
+      ref=$(dx_pick_tag "$want" "$(dx_tags "$repo")")
+      [[ -z "$ref" ]] && die "$slug: nenhuma tag compatível com '$want' em $repo"
+      ;;
+    date)
+      if [[ "$want" == latest ]]; then
+        when=$(date +%F)
+      else
+        when=$(dx_release_date "$slug" "$want") || true
+        if [[ -n "$when" ]]; then
+          note "$slug: $repo nao tem tags; usando o doc de $when (release da $want)"
+        else
+          note "$slug: sem data de release para $want; usando o doc ATUAL, pode divergir"
+          when=$(date +%F)
+        fi
+      fi
+      ref=$(dx_sha_at_date "$repo" "$when")
+      [[ -z "$ref" ]] && die "$slug: não achei commit em $repo até $when"
+      ;;
+    *) die "$slug: strategy inválida '$strategy'" ;;
+  esac
+
+  dest="$DX_DOCS/$slug/$ref"
+  if [[ ! -d "$dest/.git" ]]; then
+    note "baixando $slug docs @ $ref ($repo/$subdir)..."
+    mkdir -p "$dest"
+    git -C "$dest" init -q
+    git -C "$dest" remote add origin "https://github.com/$repo.git"
+    git -C "$dest" config core.sparseCheckout true
+    git -C "$dest" sparse-checkout set --no-cone "$subdir" >/dev/null 2>&1 || true
+    git -C "$dest" fetch -q --depth 1 --filter=blob:none origin "$ref"
+    git -C "$dest" checkout -q FETCH_HEAD
+    print -r -- "$want" > "$dest/.dx-version"
+  fi
+  print -r -- "$dest/$subdir"
+}
+
+dx_doc() {
+  local spec="${1:-}" ; shift 2>/dev/null || true
+  [[ -z "$spec" ]] && die "uso: dx doc <slug>[@versao] [--grep PADRAO] [--path]"
+  local slug="${spec%%@*}" want=""
+  [[ "$spec" == *@* ]] && want="${spec#*@}"
+
+  if [[ -z "$want" ]]; then
+    want=$(dx_detect_version "$slug") || true
+    if [[ -n "$want" ]]; then
+      note "versão do projeto: $slug $want"
+    else
+      want=latest
+      note "versão do projeto não detectada, usando latest"
+    fi
+  fi
+
+  local docpath; docpath=$(dx_doc_fetch "$slug" "$want")
+
+  case "${1:-}" in
+    --path) print -r -- "$docpath" ;;
+    --grep) shift; rg --color=auto -n -C2 "${1:?padrão}" "$docpath" | dx_page ;;
+    *)
+      print -r -- "$slug @ $want  ->  $docpath"
+      print -r -- ""
+      find "$docpath" -name '*.md' 2>/dev/null | sed "s|^$docpath/||" | sort | head -60
+      ;;
+  esac
+}
+
+dx_pin() {
+  local slug="${1:?slug}" ver="${2:?versao ou 'latest'}" root
+  root=$(dx_project_root) || die "não estou dentro de um projeto"
+  local f="$root/.dx.json"
+  [[ -f "$f" ]] || print -r -- '{}' > "$f"
+  jq --arg s "$slug" --arg v "$ver" '.[$s] = $v' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  print -r -- "pinado: $slug = $ver  (em ${f/#$HOME/~})"
+}
+
+dx_unpin() {
+  local slug="${1:?slug}" root
+  root=$(dx_project_root) || die "não estou dentro de um projeto"
+  local f="$root/.dx.json"
+  [[ -f "$f" ]] || return 0
+  jq --arg s "$slug" 'del(.[$s])' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  print -r -- "despinado: $slug"
+}
+
+# ------------------------------------------------------------------- L3 ------
+
+dx_eol_json() {
+  local product="$1" f="$DX_EOL/$product.json"
+  mkdir -p "$DX_EOL"
+  if [[ ! -f "$f" || -z "$(find "$f" -mtime -1 2>/dev/null)" ]]; then
+    curl -fsS --max-time 15 "https://endoflife.date/api/$product.json" -o "$f.tmp" 2>/dev/null \
+      && mv "$f.tmp" "$f" || rm -f "$f.tmp"
+  fi
+  [[ -f "$f" ]] && cat "$f"
+}
+
+dx_doctor() {
+  local quiet="" ; [[ "${1:-}" == (-q|--quiet) ]] && quiet=1
+  local root; root=$(dx_project_root) || { [[ -z "$quiet" ]] && print -r -- "dx: fora de um projeto"; return 0 }
+
+  local cache="$DX_CACHE/doctor/${${root//\//_}#_}.txt"
+  mkdir -p "${cache:h}"
+
+  # O hook do zsh nunca calcula: le o veredito de ontem ou dispara em background.
+  if [[ -n "$quiet" ]]; then
+    if [[ -f "$cache" && -n "$(find "$cache" -mtime -1 2>/dev/null)" ]]; then
+      [[ -s "$cache" ]] && cat "$cache"
+    else
+      ( "${0:A}" doctor >/dev/null 2>&1 & ) 2>/dev/null
+    fi
+    return 0
+  fi
+
+  local -a urgent easy
+  local DX_STRICT=1
+  local slug product ver cycle eol support verdict latest today json row
+  today=$(date +%F)
+
+  while IFS=$'\t' read -r slug product; do
+    [[ "$product" == "-" || -z "$product" ]] && continue
+    ver=$(dx_detect_version "$slug") || continue
+    [[ -z "$ver" || "$ver" == latest ]] && continue
+    cycle="${ver%.*}"
+
+    json=$(dx_eol_json "$product") || continue
+    [[ -z "$json" ]] && continue
+
+    row=$(print -r -- "$json" | jq -r --arg c "$cycle" --arg m "${ver%%.*}" '
+      (map(select(.cycle == $c)) + map(select(.cycle == $m)))[0]
+      | if . == null then empty else "\(.eol)\t\(.support)\t\(.latest // "-")" end' 2>/dev/null)
+    [[ -z "$row" ]] && continue
+    IFS=$'\t' read -r eol support latest <<< "$row"
+
+    verdict=$(dx_eol_verdict "$eol" "$support" "$today")
+    case "$verdict" in
+      EOL)      urgent+=("$slug $ver — sem suporte desde $eol (atual: $latest)") ;;
+      SECURITY) easy+=("$slug $ver — só patch de segurança desde $support (atual: $latest)") ;;
+    esac
+  done < <(awk -F'\t' 'NR>2 && NF>=6 {print $1"\t"$6}' "$DX_REGISTRY")
+
+  if (( ${#urgent} )); then
+    print -r -- "dx: ${#urgent} fora de suporte neste projeto — rode: dx doctor" > "$cache"
+  else
+    : > "$cache"
+  fi
+
+  print -r -- "projeto: ${root/#$HOME/~}"
+  if (( ${#urgent} == 0 && ${#easy} == 0 )); then
+    print -r -- "  tudo dentro do suporte."
+    return 0
+  fi
+  local item
+  (( ${#urgent} )) && { print -r -- ""; print -r -- "URGENTE (fora de suporte):"
+    for item in $urgent; do print -r -- "  ! $item"; done }
+  (( ${#easy} )) && { print -r -- ""; print -r -- "ATENÇÃO (só segurança):"
+    for item in $easy; do print -r -- "  - $item"; done }
+  print -r -- ""
+  print -r -- "doc da sua versão:   dx doc <slug>"
+  print -r -- "doc da versão nova:  dx doc <slug>@latest"
+}
+
+# --------------------------------------------------------------- refresh -----
+
+dx_refresh() {
+  dx_index_build
+  local slug product
+  while IFS=$'\t' read -r slug product; do
+    [[ "$product" == "-" || -z "$product" ]] && continue
+    dx_eol_json "$product" >/dev/null
+  done < <(awk -F'\t' 'NR>2 && NF>=6 {print $1"\t"$6}' "$DX_REGISTRY")
+  print -r -- "$(date '+%F %T') refresh ok"
+}
+
+# Pre-baixa docs numa maquina com rede, para uso posterior sem rede.
+dx_seed() {
+  (( $# )) || die "uso: dx seed <slug>[@versao] [...]  (sem versao = a do projeto)"
+  local spec slug want ok=0 bad=0
+  for spec in "$@"; do
+    slug="${spec%%@*}"; want=""
+    [[ "$spec" == *@* ]] && want="${spec#*@}"
+    [[ -z "$want" ]] && { want=$(dx_detect_version "$slug") || want=latest; }
+    [[ -z "$want" ]] && want=latest
+    if dx_doc_fetch "$slug" "$want" >/dev/null 2>&1; then
+      print -r -- "  ok   $slug@$want"; (( ok++ ))
+    else
+      print -r -- "  FALHOU $slug@$want"; (( bad++ ))
+    fi
+  done
+  print -r -- "$ok baixado(s), $bad falha(s). Cache: $DX_DOCS"
+}
+
+dx_ls() {
+  print -r -- "libs no registry:"
+  awk -F'\t' 'NR>2 && NF>=6 {printf "  %-14s %-28s %s\n", $1, $3, $5}' "$DX_REGISTRY"
+  print -r -- ""
+  print -r -- "docs em cache:"
+  if [[ -d "$DX_DOCS" ]]; then
+    local d
+    for d in "$DX_DOCS"/*/*(N/); do
+      print -r -- "  ${d:h:t} @ $([[ -f "$d/.dx-version" ]] && cat "$d/.dx-version" || print '?') ($(du -sh "$d" 2>/dev/null | cut -f1))"
+    done
+  else
+    print -r -- "  (vazio)"
+  fi
+}
+
+dx_usage() {
+  cat <<'USAGE'
+dx - docs offline, versionados pelo seu projeto
+
+  dx man [tool]           man page ou --help em cache (sem arg: fzf)
+  dx man -r               reindexa man + --help
+  dx doc <slug>[@ver]     docs da versao do projeto (ou @latest, ou @3.15.3)
+  dx doc <slug> --grep P  busca dentro do doc em cache
+  dx doc <slug> --path    so imprime o caminho (para o agente)
+  dx pin <slug> <ver>     fixa a versao do doc neste projeto (.dx.json)
+  dx unpin <slug>
+  dx doctor [-q]          o que saiu de suporte neste projeto
+  dx seed <slug>@<ver>    pre-baixa doc (para usar depois sem rede)
+  dx ls                   registry + cache
+  dx refresh              job diario (launchd)
+USAGE
+}
+
+case "${1:-}" in
+  man)      shift; dx_man "$@" ;;
+  man-show) shift; dx_man_show "$@" ;;
+  doc)      shift; dx_doc "$@" ;;
+  pin)      shift; dx_pin "$@" ;;
+  unpin)    shift; dx_unpin "$@" ;;
+  doctor)   shift; dx_doctor "$@" ;;
+  refresh)  shift; dx_refresh "$@" ;;
+  seed)     shift; dx_seed "$@" ;;
+  ls)       shift; dx_ls "$@" ;;
+  ""|-h|--help) dx_usage ;;
+  *)        die "comando desconhecido: $1 (dx --help)" ;;
+esac

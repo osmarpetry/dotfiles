@@ -1,0 +1,25 @@
+---
+applications:
+  Activity Monitor: "Option+Shift+Esc"
+  Finder: "Option+F"
+  Ghostty: "Option+Shift+T"
+  Google Chrome: "Option+1"
+  Microsoft To Do: "Option+T"
+  Notes: "Option+Q"
+  Notion: "Option+N"
+  OBS: "Option+G"
+  Steam: "Option+S"
+  T3 Code Alpha: "Option+3"
+  Zed: "Option+Z"
+commands:
+  Kill Process: "Option+K"
+  Obsidian Daily Note: "Option+O"
+  Search Emoji and Symbols: "Control+Command+Space"
+enabled_without_hotkey:
+  - Clipboard History
+  - Raycast AI
+policy:
+  copy_full_config: false
+  import_full_rayconfig: false
+  disable_unlisted_hotkeys: true
+

@@ -1,0 +1,19 @@
+[user]
+	name = Osmar Petry
+	email = osmarpetry@gmail.com
+	signingKey = ~/.ssh/id_ed25519
+
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
+[commit]
+	gpgSign = true
+
+[init]
+	defaultBranch = main
+[pull]
+	rebase = false
+
+[includeIf "gitdir:~/workspace/work/**"]
+	path = ~/.gitconfig-work

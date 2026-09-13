@@ -1,0 +1,20 @@
+# slug	detect	repo	subdir	strategy	eol	datesrc
+# strategy: tag = checkout na tag da sua versao | date = commit mais proximo do release (repo sem tags)
+nuxt	npm:nuxt	nuxt/nuxt	docs	tag	nuxt	-
+nuxt-ui	npm:@nuxt/ui	nuxt/ui	docs	tag	-	-
+vue	npm:vue	vuejs/docs	src	date	vue	vuejs/core
+vite	npm:vite	vitejs/vite	docs	tag	-	-
+pinia	npm:pinia	vuejs/pinia	packages/docs	tag	-	-
+typescript	npm:typescript	microsoft/TypeScript-Website	packages/documentation	date	-	microsoft/TypeScript
+tailwind	npm:tailwindcss	tailwindlabs/tailwindcss.com	src	date	-	tailwindlabs/tailwindcss
+temporal	cmd:temporal	temporalio/documentation	docs	date	-	temporalio/cli
+temporal-py	pypi:temporalio	temporalio/sdk-python	README.md	tag	-	-
+temporal-ts	npm:@temporalio/client	temporalio/sdk-typescript	packages	tag	-	-
+supabase	npm:@supabase/supabase-js	supabase/supabase-js	src	tag	-	-
+node	runtime:node	nodejs/node	doc	tag	nodejs	-
+python	runtime:python	python/cpython	Doc	tag	python	-
+go	runtime:go	golang/go	doc	tag	go	-
+deno	runtime:deno	denoland/docs	runtime	date	-	denoland/deno
+uv	cmd:uv	astral-sh/uv	docs	tag	-	-
+pnpm	cmd:pnpm	pnpm/pnpm.io	docs	date	-	pnpm/pnpm
+hugo	cmd:hugo	gohugoio/hugoDocs	content/en	tag	-	-

@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+# wm-remove [handle] — pick a worktree (never the main one) and tear it down.
+set -uo pipefail
+
+die() {
+  print -u2 -- "wm-remove: $1"
+  [[ -n "${TMUX:-}" ]] && tmux display-message -d 4000 "wm-remove: $1"
+  exit 1
+}
+
+json=$(workmux list --json 2>/dev/null) || die "workmux list failed (not in a repo?)"
+rows=$(print -r -- "$json" | jq -r '
+  .[] | select(.is_main | not) | [
+    .handle,
+    .branch,
+    (if .has_uncommitted_changes then "dirty" else "clean" end)
+  ] | @tsv') || die "could not parse worktree list"
+[[ -n "$rows" ]] || die "no removable worktrees"
+
+if (( $# )); then
+  handle="$1"
+else
+  command -v fzf >/dev/null || die "fzf is not installed"
+  handle=$(print -r -- "$rows" \
+    | awk -F'\t' '{printf "%s\t%-24s %-30s %s\n", $1, $1, $2, $3}' \
+    | fzf --delimiter='\t' --with-nth=2 --prompt='remove worktree> ' --height=100% --border --no-multi \
+    | cut -f1) || exit 1
+fi
+[[ -n "$handle" ]] || exit 1
+
+exec workmux remove "$handle"

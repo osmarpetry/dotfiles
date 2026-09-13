@@ -1,0 +1,10 @@
+.DS_Store
+*.log
+
+# Machine-only, never committed.
+local/*
+!local/README.md
+
+# Exceeds GitHub's 100MB per-file push limit — stays local-only, see
+# binary-apps/README.md.
+binary-apps/archives/Qwen.app.zip

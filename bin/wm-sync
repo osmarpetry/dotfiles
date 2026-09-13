@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+# wm-sync — re-apply .workmux.yaml copy/symlink rules to every worktree of this repo.
+set -uo pipefail
+
+out=$(workmux sync-files --all 2>&1)
+rc=$?
+last=$(print -r -- "$out" | tail -1)
+if (( rc == 0 )); then
+  msg="wm-sync: ${last:-done}"
+else
+  msg="wm-sync failed: ${last:-exit $rc}"
+fi
+[[ -n "${TMUX:-}" ]] && tmux display-message -d 4000 "$msg"
+print -r -- "$out"
+exit $rc

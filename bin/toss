@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+# Move files/dirs into /tmp instead of deleting them: mv is instant (same-volume
+# rename, no recursive walk like rm -rf), and macOS clears /tmp on its own
+# (daily cleanup of files older than 3 days, and on reboot).
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  echo "usage: toss <file|dir> [...]" >&2
+  exit 1
+fi
+
+dest="$(mktemp -d /tmp/toss.XXXXXX)"
+for item in "$@"; do
+  mv -v -- "$item" "$dest/"
+done

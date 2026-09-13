@@ -1,0 +1,1559 @@
+{
+  "generated_from": "/Users/osmar/workspace",
+  "clone_depth": 1,
+  "repos": [
+    {
+      "owner": "mikepqr",
+      "name": "resume-markdown",
+      "remote": "git@github.com:mikepqr/resume-markdown.git",
+      "ssh_remote": "git@github.com:mikepqr/resume-markdown.git",
+      "target": "~/workspace/mikepqr/resume-markdown",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/mikepqr/resume-markdown",
+          "remote": "git@github.com:mikepqr/resume-markdown.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "animation-principles-explorer",
+      "remote": "git@github.com:osmarpetry/animation-principles-explorer.git",
+      "ssh_remote": "git@github.com:osmarpetry/animation-principles-explorer.git",
+      "target": "~/workspace/osmarpetry/animation-principles-explorer",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/animation-principles-explorer",
+          "remote": "git@github.com:osmarpetry/animation-principles-explorer.git",
+          "branch": "main",
+          "dirty": 2
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/animation-principles-explorer",
+          "remote": "https://github.com/osmarpetry/animation-principles-explorer.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/animation-principles-explorer",
+          "remote": "git@github.com:osmarpetry/animation-principles-explorer.git",
+          "branch": "main",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "axios-server-herror-handler-component",
+      "remote": "git@github.com:osmarpetry/axios-server-herror-handler-component.git",
+      "ssh_remote": "git@github.com:osmarpetry/axios-server-herror-handler-component.git",
+      "target": "~/workspace/osmarpetry/axios-server-herror-handler-component",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/axios-server-herror-handler-component",
+          "remote": "git@github.com:osmarpetry/axios-server-herror-handler-component.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "backend-appsync",
+      "remote": "git@github.com:osmarpetry/backend-appsync.git",
+      "ssh_remote": "git@github.com:osmarpetry/backend-appsync.git",
+      "target": "~/workspace/osmarpetry/backend-appsync",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/backend-appsync",
+          "remote": "git@github.com:osmarpetry/backend-appsync.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "bater-horas2",
+      "remote": "git@github.com:osmarpetry/bater-horas2.git",
+      "ssh_remote": "git@github.com:osmarpetry/bater-horas2.git",
+      "target": "~/workspace/osmarpetry/bater-horas2",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/bater-horas2",
+          "remote": "git@github.com:osmarpetry/bater-horas2.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "black-spotify",
+      "remote": "git@github.com:osmarpetry/black-spotify.git",
+      "ssh_remote": "git@github.com:osmarpetry/black-spotify.git",
+      "target": "~/workspace/osmarpetry/black-spotify",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/black-spotify",
+          "remote": "git@github.com:osmarpetry/black-spotify.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "bootstrap-resposive-site",
+      "remote": "git@github.com:osmarpetry/bootstrap-resposive-site.git",
+      "ssh_remote": "git@github.com:osmarpetry/bootstrap-resposive-site.git",
+      "target": "~/workspace/osmarpetry/bootstrap-resposive-site",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/bootstrap-resposive-site",
+          "remote": "git@github.com:osmarpetry/bootstrap-resposive-site.git",
+          "branch": "master",
+          "dirty": 2
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/bootstrap-resposive-site",
+          "remote": "git@github.com:osmarpetry/bootstrap-resposive-site.git",
+          "branch": "master",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "chargebee-brevo-demo",
+      "remote": "git@github.com:osmarpetry/chargebee-brevo-demo.git",
+      "ssh_remote": "git@github.com:osmarpetry/chargebee-brevo-demo.git",
+      "target": "~/workspace/osmarpetry/chargebee-brevo-demo",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/chargebee-brevo-demo",
+          "remote": "git@github.com:osmarpetry/chargebee-brevo-demo.git",
+          "branch": "main",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/chargebee-brevo-demo",
+          "remote": "https://github.com/osmarpetry/chargebee-brevo-demo.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "chargebee-brevo-sync",
+      "remote": "git@github.com:osmarpetry/chargebee-brevo-sync.git",
+      "ssh_remote": "git@github.com:osmarpetry/chargebee-brevo-sync.git",
+      "target": "~/workspace/osmarpetry/chargebee-brevo-sync",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/chargebee-brevo-sync",
+          "remote": "git@github.com:osmarpetry/chargebee-brevo-sync.git",
+          "branch": "main",
+          "dirty": 11
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/chargebee-brevo-sync",
+          "remote": "git@github.com:osmarpetry/chargebee-brevo-sync.git",
+          "branch": "main",
+          "dirty": 11
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "citadel-character-atlas",
+      "remote": "git@github.com:osmarpetry/citadel-character-atlas.git",
+      "ssh_remote": "git@github.com:osmarpetry/citadel-character-atlas.git",
+      "target": "~/workspace/osmarpetry/citadel-character-atlas",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/citadel-character-atlas",
+          "remote": "git@github.com:osmarpetry/citadel-character-atlas.git",
+          "branch": "main",
+          "dirty": 7
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/citadel-character-atlas",
+          "remote": "git@github.com:osmarpetry/citadel-character-atlas.git",
+          "branch": "main",
+          "dirty": 7
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "corebase-codeassment",
+      "remote": "git@github.com:osmarpetry/corebase-codeassment.git",
+      "ssh_remote": "git@github.com:osmarpetry/corebase-codeassment.git",
+      "target": "~/workspace/osmarpetry/corebase-codeassment",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/corebase-codeassment",
+          "remote": "git@github.com:osmarpetry/corebase-codeassment.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "CustomMuiDrawer",
+      "remote": "git@github.com:osmarpetry/CustomMuiDrawer.git",
+      "ssh_remote": "git@github.com:osmarpetry/CustomMuiDrawer.git",
+      "target": "~/workspace/osmarpetry/CustomMuiDrawer",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/CustomMuiDrawer",
+          "remote": "git@github.com:osmarpetry/CustomMuiDrawer.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/CustomMuiDrawer",
+          "remote": "git@github.com:osmarpetry/CustomMuiDrawer.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "docker-react",
+      "remote": "git@github.com:osmarpetry/docker-react.git",
+      "ssh_remote": "git@github.com:osmarpetry/docker-react.git",
+      "target": "~/workspace/osmarpetry/docker-react",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/docker-react",
+          "remote": "git@github.com:osmarpetry/docker-react.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "earth-1999",
+      "remote": "git@github.com:osmarpetry/earth-1999.git",
+      "ssh_remote": "git@github.com:osmarpetry/earth-1999.git",
+      "target": "~/workspace/osmarpetry/earth-1999",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/earth-1999",
+          "remote": "git@github.com:osmarpetry/earth-1999.git",
+          "branch": "main",
+          "dirty": 12
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/earth-1999",
+          "remote": "git@github.com:osmarpetry/earth-1999.git",
+          "branch": "main",
+          "dirty": 12
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "echo-coach-lingue",
+      "remote": "git@github.com:osmarpetry/echo-coach-lingue.git",
+      "ssh_remote": "git@github.com:osmarpetry/echo-coach-lingue.git",
+      "target": "~/workspace/osmarpetry/echo-coach-lingue",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/echo-coach-lingue",
+          "remote": "git@github.com:osmarpetry/echo-coach-lingue.git",
+          "branch": "main",
+          "dirty": 4
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/echo-coach-lingue",
+          "remote": "git@github.com:osmarpetry/echo-coach-lingue.git",
+          "branch": "main",
+          "dirty": 4
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "felippe",
+      "remote": "git@github.com:osmarpetry/felippe.git",
+      "ssh_remote": "git@github.com:osmarpetry/felippe.git",
+      "target": "~/workspace/osmarpetry/felippe",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/felippe",
+          "remote": "git@github.com:osmarpetry/felippe.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "flowers",
+      "remote": "git@github.com:osmarpetry/flowers.git",
+      "ssh_remote": "git@github.com:osmarpetry/flowers.git",
+      "target": "~/workspace/osmarpetry/flowers",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/flowers",
+          "remote": "git@github.com:osmarpetry/flowers.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "flowers-city",
+      "remote": "git@github.com:osmarpetry/flowers-city.git",
+      "ssh_remote": "git@github.com:osmarpetry/flowers-city.git",
+      "target": "~/workspace/osmarpetry/flowers-city",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/flowers-city",
+          "remote": "git@github.com:osmarpetry/flowers-city.git",
+          "branch": "main",
+          "dirty": 20
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/flowers-city",
+          "remote": "git@github.com:osmarpetry/flowers-city.git",
+          "branch": "main",
+          "dirty": 20
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "forum",
+      "remote": "git@github.com:osmarpetry/forum.git",
+      "ssh_remote": "git@github.com:osmarpetry/forum.git",
+      "target": "~/workspace/osmarpetry/forum",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/forum",
+          "remote": "git@github.com:osmarpetry/forum.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/forum",
+          "remote": "git@github.com:osmarpetry/forum.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "forum-springbootadmin",
+      "remote": "git@github.com:osmarpetry/forum-springbootadmin.git",
+      "ssh_remote": "git@github.com:osmarpetry/forum-springbootadmin.git",
+      "target": "~/workspace/osmarpetry/forum-springbootadmin",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/forum-springbootadmin",
+          "remote": "git@github.com:osmarpetry/forum-springbootadmin.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/forum-springbootadmin",
+          "remote": "git@github.com:osmarpetry/forum-springbootadmin.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "fotograf",
+      "remote": "git@github.com:osmarpetry/fotograf.git",
+      "ssh_remote": "git@github.com:osmarpetry/fotograf.git",
+      "target": "~/workspace/osmarpetry/fotograf",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/fotograf",
+          "remote": "git@github.com:osmarpetry/fotograf.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/fotograf",
+          "remote": "git@github.com:osmarpetry/fotograf.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "goodread",
+      "remote": "git@github.com:osmarpetry/goodread.git",
+      "ssh_remote": "git@github.com:osmarpetry/goodread.git",
+      "target": "~/workspace/osmarpetry/goodread",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/goodread",
+          "remote": "git@github.com:osmarpetry/goodread.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "hello-go",
+      "remote": "git@github.com:osmarpetry/hello-go.git",
+      "ssh_remote": "git@github.com:osmarpetry/hello-go.git",
+      "target": "~/workspace/osmarpetry/hello-go",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/hello-go",
+          "remote": "git@github.com:osmarpetry/hello-go.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/hello-go",
+          "remote": "git@github.com:osmarpetry/hello-go.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "horas",
+      "remote": "git@github.com:osmarpetry/horas.git",
+      "ssh_remote": "git@github.com:osmarpetry/horas.git",
+      "target": "~/workspace/osmarpetry/horas",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/horas",
+          "remote": "git@github.com:osmarpetry/horas.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/horas",
+          "remote": "git@github.com:osmarpetry/horas.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "infractions-hawaii",
+      "remote": "git@github.com:osmarpetry/infractions-hawaii.git",
+      "ssh_remote": "git@github.com:osmarpetry/infractions-hawaii.git",
+      "target": "~/workspace/osmarpetry/infractions-hawaii",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/infractions-hawaii",
+          "remote": "git@github.com:osmarpetry/infractions-hawaii.git",
+          "branch": "first-question",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "jeff-next",
+      "remote": "git@github.com:osmarpetry/jeff-next.git",
+      "ssh_remote": "git@github.com:osmarpetry/jeff-next.git",
+      "target": "~/workspace/osmarpetry/jeff-next",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/jeff-next",
+          "remote": "https://github.com/osmarpetry/jeff-next.git",
+          "branch": "main",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/jeff-next",
+          "remote": "git@github.com:osmarpetry/jeff-next.git",
+          "branch": "main",
+          "dirty": 12
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/jeff-next",
+          "remote": "git@github.com:osmarpetry/jeff-next.git",
+          "branch": "main",
+          "dirty": 12
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "lion-be",
+      "remote": "git@github.com:osmarpetry/lion-be.git",
+      "ssh_remote": "git@github.com:osmarpetry/lion-be.git",
+      "target": "~/workspace/osmarpetry/lion-be",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lion-be",
+          "remote": "git@github.com:osmarpetry/lion-be.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lion-be",
+          "remote": "git@github.com:osmarpetry/lion-be.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "lion-fe",
+      "remote": "git@github.com:osmarpetry/lion-fe.git",
+      "ssh_remote": "git@github.com:osmarpetry/lion-fe.git",
+      "target": "~/workspace/osmarpetry/lion-fe",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lion-fe",
+          "remote": "git@github.com:osmarpetry/lion-fe.git",
+          "branch": "main",
+          "dirty": 2
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lion-fe",
+          "remote": "git@github.com:osmarpetry/lion-fe.git",
+          "branch": "main",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "lumdb",
+      "remote": "git@github.com:osmarpetry/lumdb.git",
+      "ssh_remote": "git@github.com:osmarpetry/lumdb.git",
+      "target": "~/workspace/osmarpetry/lumdb",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lumdb",
+          "remote": "git@github.com:osmarpetry/lumdb.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "lumdb-nextjs",
+      "remote": "git@github.com:osmarpetry/lumdb-nextjs.git",
+      "ssh_remote": "git@github.com:osmarpetry/lumdb-nextjs.git",
+      "target": "~/workspace/osmarpetry/lumdb-nextjs",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/lumdb-nextjs",
+          "remote": "git@github.com:osmarpetry/lumdb-nextjs.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "my-accounts",
+      "remote": "git@github.com:osmarpetry/my-accounts.git",
+      "ssh_remote": "git@github.com:osmarpetry/my-accounts.git",
+      "target": "~/workspace/osmarpetry/my-accounts",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/my-accounts",
+          "remote": "git@github.com:osmarpetry/my-accounts.git",
+          "branch": "main",
+          "dirty": 2
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/my-accounts",
+          "remote": "git@github.com:osmarpetry/my-accounts.git",
+          "branch": "main",
+          "dirty": 2
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/my-accounts",
+          "remote": "git@github.com:osmarpetry/my-accounts.git",
+          "branch": "main",
+          "dirty": 2
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/my-accounts",
+          "remote": "git@github.com:osmarpetry/my-accounts.git",
+          "branch": "main",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "n8n",
+      "remote": "git@github.com:osmarpetry/n8n.git",
+      "ssh_remote": "git@github.com:osmarpetry/n8n.git",
+      "target": "~/workspace/osmarpetry/n8n",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/n8n",
+          "remote": "git@github.com:osmarpetry/n8n.git",
+          "branch": "master",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/n8n",
+          "remote": "git@github.com:osmarpetry/n8n.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "nvim-configuration",
+      "remote": "git@github.com:osmarpetry/nvim-configuration.git",
+      "ssh_remote": "git@github.com:osmarpetry/nvim-configuration.git",
+      "target": "~/workspace/osmarpetry/nvim-configuration",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/nvim-configuration",
+          "remote": "git@github.com:osmarpetry/nvim-configuration.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/nvim-configuration",
+          "remote": "git@github.com:osmarpetry/nvim-configuration.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "obisdian",
+      "remote": "git@github.com:osmarpetry/obisdian.git",
+      "ssh_remote": "git@github.com:osmarpetry/obisdian.git",
+      "target": "~/workspace/osmarpetry/obisdian",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obisdian",
+          "remote": "git@github.com:osmarpetry/obisdian.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obisdian",
+          "remote": "git@github.com:osmarpetry/obisdian.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "obsidian-2025",
+      "remote": "git@github.com:osmarpetry/obsidian-2025.git",
+      "ssh_remote": "git@github.com:osmarpetry/obsidian-2025.git",
+      "target": "~/workspace/osmarpetry/obsidian-2025",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obsidian-2025",
+          "remote": "git@github.com:osmarpetry/obsidian-2025.git",
+          "branch": "main",
+          "dirty": 1
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obsidian-2025",
+          "remote": "git@github.com:osmarpetry/obsidian-2025.git",
+          "branch": "main",
+          "dirty": 14
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obsidian-2025",
+          "remote": "git@github.com:osmarpetry/obsidian-2025.git",
+          "branch": "main",
+          "dirty": 1
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/obsidian-2025",
+          "remote": "git@github.com:osmarpetry/obsidian-2025.git",
+          "branch": "main",
+          "dirty": 14
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "osmarpetry-notion",
+      "remote": "git@github.com:osmarpetry/osmarpetry-notion.git",
+      "ssh_remote": "git@github.com:osmarpetry/osmarpetry-notion.git",
+      "target": "~/workspace/osmarpetry/osmarpetry-notion",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/osmarpetry-notion",
+          "remote": "git@github.com:osmarpetry/osmarpetry-notion.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "osmarpetry.me",
+      "remote": "git@github.com:osmarpetry/osmarpetry.me.git",
+      "ssh_remote": "git@github.com:osmarpetry/osmarpetry.me.git",
+      "target": "~/workspace/osmarpetry/osmarpetry.me",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/osmarpetry.me",
+          "remote": "git@github.com:osmarpetry/osmarpetry.me.git",
+          "branch": "master",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/osmarpetry.me",
+          "remote": "git@github.com:osmarpetry/osmarpetry.me.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "personal-blog-gatsby-trash",
+      "remote": "git@github.com:osmarpetry/personal-blog-gatsby-trash.git",
+      "ssh_remote": "git@github.com:osmarpetry/personal-blog-gatsby-trash.git",
+      "target": "~/workspace/osmarpetry/personal-blog-gatsby-trash",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/personal-blog-gatsby-trash",
+          "remote": "git@github.com:osmarpetry/personal-blog-gatsby-trash.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "pirataflix",
+      "remote": "git@github.com:osmarpetry/pirataflix.git",
+      "ssh_remote": "git@github.com:osmarpetry/pirataflix.git",
+      "target": "~/workspace/osmarpetry/pirataflix",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/pirataflix",
+          "remote": "git@github.com:osmarpetry/pirataflix.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "pirataflix2",
+      "remote": "git@github.com:osmarpetry/pirataflix2.git",
+      "ssh_remote": "git@github.com:osmarpetry/pirataflix2.git",
+      "target": "~/workspace/osmarpetry/pirataflix2",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/pirataflix2",
+          "remote": "git@github.com:osmarpetry/pirataflix2.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/pirataflix2",
+          "remote": "git@github.com:osmarpetry/pirataflix2.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "portfolio-gatsby-v1",
+      "remote": "git@github.com:osmarpetry/portfolio-gatsby-v1.git",
+      "ssh_remote": "git@github.com:osmarpetry/portfolio-gatsby-v1.git",
+      "target": "~/workspace/osmarpetry/portfolio-gatsby-v1",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portfolio-gatsby-v1",
+          "remote": "git@github.com:osmarpetry/portfolio-gatsby-v1.git",
+          "branch": "master",
+          "dirty": 6
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portfolio-gatsby-v1",
+          "remote": "git@github.com:osmarpetry/portfolio-gatsby-v1.git",
+          "branch": "master",
+          "dirty": 6
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "Portifolio",
+      "remote": "git@github.com:osmarpetry/Portifolio.git",
+      "ssh_remote": "git@github.com:osmarpetry/Portifolio.git",
+      "target": "~/workspace/osmarpetry/Portifolio",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Portifolio",
+          "remote": "https://github.com/osmarpetry/Portifolio.git",
+          "branch": "main",
+          "dirty": 5
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Portifolio",
+          "remote": "https://github.com/osmarpetry/Portifolio.git",
+          "branch": "main",
+          "dirty": 5
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "portifolio-eleventry",
+      "remote": "git@github.com:osmarpetry/portifolio-eleventry.git",
+      "ssh_remote": "git@github.com:osmarpetry/portifolio-eleventry.git",
+      "target": "~/workspace/osmarpetry/portifolio-eleventry",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-eleventry",
+          "remote": "git@github.com:osmarpetry/portifolio-eleventry.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "portifolio-notion",
+      "remote": "git@github.com:osmarpetry/portifolio-notion.git",
+      "ssh_remote": "git@github.com:osmarpetry/portifolio-notion.git",
+      "target": "~/workspace/osmarpetry/portifolio-notion",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-notion",
+          "remote": "git@github.com:osmarpetry/portifolio-notion.git",
+          "branch": "main",
+          "dirty": 1
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-notion",
+          "remote": "git@github.com:osmarpetry/portifolio-notion.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-notion",
+          "remote": "git@github.com:osmarpetry/portifolio-notion.git",
+          "branch": "main",
+          "dirty": 1
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-notion",
+          "remote": "git@github.com:osmarpetry/portifolio-notion.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "portifolio-ssg2",
+      "remote": "git@github.com:osmarpetry/portifolio-ssg2.git",
+      "ssh_remote": "git@github.com:osmarpetry/portifolio-ssg2.git",
+      "target": "~/workspace/osmarpetry/portifolio-ssg2",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-ssg2",
+          "remote": "git@github.com:osmarpetry/portifolio-ssg2.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/portifolio-ssg2",
+          "remote": "git@github.com:osmarpetry/portifolio-ssg2.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "quizzler-flutter",
+      "remote": "git@github.com:osmarpetry/quizzler-flutter.git",
+      "ssh_remote": "git@github.com:osmarpetry/quizzler-flutter.git",
+      "target": "~/workspace/osmarpetry/quizzler-flutter",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/quizzler-flutter",
+          "remote": "git@github.com:osmarpetry/quizzler-flutter.git",
+          "branch": "master",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "react-hook-ts-poc",
+      "remote": "git@github.com:osmarpetry/react-hook-ts-poc.git",
+      "ssh_remote": "git@github.com:osmarpetry/react-hook-ts-poc.git",
+      "target": "~/workspace/osmarpetry/react-hook-ts-poc",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/react-hook-ts-poc",
+          "remote": "git@github.com:osmarpetry/react-hook-ts-poc.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "react-performance-tips",
+      "remote": "git@github.com:osmarpetry/react-performance-tips.git",
+      "ssh_remote": "git@github.com:osmarpetry/react-performance-tips.git",
+      "target": "~/workspace/osmarpetry/react-performance-tips",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/react-performance-tips",
+          "remote": "git@github.com:osmarpetry/react-performance-tips.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "Responsive-Typing-Trainer-App",
+      "remote": "git@github.com:osmarpetry/Responsive-Typing-Trainer-App.git",
+      "ssh_remote": "git@github.com:osmarpetry/Responsive-Typing-Trainer-App.git",
+      "target": "~/workspace/osmarpetry/Responsive-Typing-Trainer-App",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Responsive-Typing-Trainer-App",
+          "remote": "https://github.com/osmarpetry/Responsive-Typing-Trainer-App.git",
+          "branch": "main",
+          "dirty": 5
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Responsive-Typing-Trainer-App",
+          "remote": "https://github.com/osmarpetry/Responsive-Typing-Trainer-App.git",
+          "branch": "main",
+          "dirty": 5
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "rick-et-morty",
+      "remote": "git@github.com:osmarpetry/rick-et-morty.git",
+      "ssh_remote": "git@github.com:osmarpetry/rick-et-morty.git",
+      "target": "~/workspace/osmarpetry/rick-et-morty",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/rick-et-morty",
+          "remote": "git@github.com:osmarpetry/rick-et-morty.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "ritchie-workshop",
+      "remote": "git@github.com:osmarpetry/ritchie-workshop.git",
+      "ssh_remote": "git@github.com:osmarpetry/ritchie-workshop.git",
+      "target": "~/workspace/osmarpetry/ritchie-workshop",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/ritchie-workshop",
+          "remote": "git@github.com:osmarpetry/ritchie-workshop.git",
+          "branch": "master",
+          "dirty": 2
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/ritchie-workshop",
+          "remote": "git@github.com:osmarpetry/ritchie-workshop.git",
+          "branch": "master",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "roast-my-landing",
+      "remote": "git@github.com:osmarpetry/roast-my-landing.git",
+      "ssh_remote": "git@github.com:osmarpetry/roast-my-landing.git",
+      "target": "~/workspace/osmarpetry/roast-my-landing",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/roast-my-landing",
+          "remote": "git@github.com:osmarpetry/roast-my-landing.git",
+          "branch": "main",
+          "dirty": 7
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/roast-my-landing",
+          "remote": "git@github.com:osmarpetry/roast-my-landing.git",
+          "branch": "main",
+          "dirty": 7
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "roast-my-landing-v1",
+      "remote": "git@github.com:osmarpetry/roast-my-landing-v1.git",
+      "ssh_remote": "git@github.com:osmarpetry/roast-my-landing-v1.git",
+      "target": "~/workspace/osmarpetry/roast-my-landing-v1",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/roast-my-landing-v1",
+          "remote": "https://github.com/osmarpetry/roast-my-landing-v1.git",
+          "branch": "feat/slc-demo-funnel",
+          "dirty": 35
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/roast-my-landing-v1",
+          "remote": "https://github.com/osmarpetry/roast-my-landing-v1.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/roast-my-landing-v1",
+          "remote": "https://github.com/osmarpetry/roast-my-landing-v1.git",
+          "branch": "feat/slc-demo-funnel",
+          "dirty": 35
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "simple-next",
+      "remote": "git@github.com:osmarpetry/simple-next.git",
+      "ssh_remote": "git@github.com:osmarpetry/simple-next.git",
+      "target": "~/workspace/osmarpetry/simple-next",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/simple-next",
+          "remote": "git@github.com:osmarpetry/simple-next.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "speach-poc",
+      "remote": "git@github.com:osmarpetry/speach-poc.git",
+      "ssh_remote": "git@github.com:osmarpetry/speach-poc.git",
+      "target": "~/workspace/osmarpetry/speach-poc",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/speach-poc",
+          "remote": "git@github.com:osmarpetry/speach-poc.git",
+          "branch": "main",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/speach-poc",
+          "remote": "git@github.com:osmarpetry/speach-poc.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "spring-animations",
+      "remote": "git@github.com:osmarpetry/spring-animations.git",
+      "ssh_remote": "git@github.com:osmarpetry/spring-animations.git",
+      "target": "~/workspace/osmarpetry/spring-animations",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/spring-animations",
+          "remote": "git@github.com:osmarpetry/spring-animations.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/spring-animations",
+          "remote": "git@github.com:osmarpetry/spring-animations.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "storybook-class",
+      "remote": "git@github.com:osmarpetry/storybook-class.git",
+      "ssh_remote": "git@github.com:osmarpetry/storybook-class.git",
+      "target": "~/workspace/osmarpetry/storybook-class",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/storybook-class",
+          "remote": "git@github.com:osmarpetry/storybook-class.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/storybook-class",
+          "remote": "git@github.com:osmarpetry/storybook-class.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "tcc-catolica",
+      "remote": "git@github.com:osmarpetry/tcc-catolica.git",
+      "ssh_remote": "git@github.com:osmarpetry/tcc-catolica.git",
+      "target": "~/workspace/osmarpetry/tcc-catolica",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/tcc-catolica",
+          "remote": "git@github.com:osmarpetry/tcc-catolica.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/tcc-catolica",
+          "remote": "git@github.com:osmarpetry/tcc-catolica.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "tech-assessment-fe",
+      "remote": "git@github.com:osmarpetry/tech-assessment-fe.git",
+      "ssh_remote": "git@github.com:osmarpetry/tech-assessment-fe.git",
+      "target": "~/workspace/osmarpetry/tech-assessment-fe",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/tech-assessment-fe",
+          "remote": "git@github.com:osmarpetry/tech-assessment-fe.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "teste",
+      "remote": "git@github.com:osmarpetry/teste.git",
+      "ssh_remote": "git@github.com:osmarpetry/teste.git",
+      "target": "~/workspace/osmarpetry/teste",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/teste",
+          "remote": "git@github.com:osmarpetry/teste.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/teste",
+          "remote": "git@github.com:osmarpetry/teste.git",
+          "branch": "main",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "themis",
+      "remote": "git@github.com:osmarpetry/themis.git",
+      "ssh_remote": "git@github.com:osmarpetry/themis.git",
+      "target": "~/workspace/osmarpetry/themis",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/themis",
+          "remote": "git@github.com:osmarpetry/themis.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/themis",
+          "remote": "git@github.com:osmarpetry/themis.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "Therapistplatformprototype",
+      "remote": "git@github.com:osmarpetry/Therapistplatformprototype.git",
+      "ssh_remote": "git@github.com:osmarpetry/Therapistplatformprototype.git",
+      "target": "~/workspace/osmarpetry/Therapistplatformprototype",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Therapistplatformprototype",
+          "remote": "git@github.com:osmarpetry/Therapistplatformprototype.git",
+          "branch": "t3-12april-setup",
+          "dirty": 2
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/Therapistplatformprototype",
+          "remote": "git@github.com:osmarpetry/Therapistplatformprototype.git",
+          "branch": "t3-12april-setup",
+          "dirty": 2
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "todo",
+      "remote": "git@github.com:osmarpetry/todo.git",
+      "ssh_remote": "git@github.com:osmarpetry/todo.git",
+      "target": "~/workspace/osmarpetry/todo",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/todo",
+          "remote": "git@github.com:osmarpetry/todo.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "tokens-figma-node",
+      "remote": "git@github.com:osmarpetry/tokens-figma-node.git",
+      "ssh_remote": "git@github.com:osmarpetry/tokens-figma-node.git",
+      "target": "~/workspace/osmarpetry/tokens-figma-node",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/tokens-figma-node",
+          "remote": "git@github.com:osmarpetry/tokens-figma-node.git",
+          "branch": "master",
+          "dirty": 14
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/tokens-figma-node",
+          "remote": "git@github.com:osmarpetry/tokens-figma-node.git",
+          "branch": "master",
+          "dirty": 14
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "twitter-bot",
+      "remote": "git@github.com:osmarpetry/twitter-bot.git",
+      "ssh_remote": "git@github.com:osmarpetry/twitter-bot.git",
+      "target": "~/workspace/osmarpetry/twitter-bot",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/twitter-bot",
+          "remote": "git@github.com:osmarpetry/twitter-bot.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/twitter-bot",
+          "remote": "git@github.com:osmarpetry/twitter-bot.git",
+          "branch": "master",
+          "dirty": 1
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "weather-7",
+      "remote": "git@github.com:osmarpetry/weather-7.git",
+      "ssh_remote": "git@github.com:osmarpetry/weather-7.git",
+      "target": "~/workspace/osmarpetry/weather-7",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/weather-7",
+          "remote": "git@github.com:osmarpetry/weather-7.git",
+          "branch": "main",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/weather-7",
+          "remote": "git@github.com:osmarpetry/weather-7.git",
+          "branch": "main",
+          "dirty": 3
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/weather-7",
+          "remote": "git@github.com:osmarpetry/weather-7.git",
+          "branch": "main",
+          "dirty": 3
+        }
+      ]
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "xalgo",
+      "remote": "git@github.com:osmarpetry/xalgo.git",
+      "ssh_remote": "git@github.com:osmarpetry/xalgo.git",
+      "target": "~/workspace/osmarpetry/xalgo",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/xalgo",
+          "remote": "git@github.com:osmarpetry/xalgo.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "yan-template",
+      "remote": "git@github.com:osmarpetry/yan-template.git",
+      "ssh_remote": "git@github.com:osmarpetry/yan-template.git",
+      "target": "~/workspace/osmarpetry/yan-template",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/yan-template",
+          "remote": "git@github.com:osmarpetry/yan-template.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    },
+    {
+      "owner": "osmarpetry",
+      "name": "yan-template-next-2026",
+      "remote": "git@github.com:osmarpetry/yan-template-next-2026.git",
+      "ssh_remote": "git@github.com:osmarpetry/yan-template-next-2026.git",
+      "target": "~/workspace/osmarpetry/yan-template-next-2026",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/yan-template-next-2026",
+          "remote": "https://github.com/osmarpetry/yan-template-next-2026.git",
+          "branch": "main",
+          "dirty": 0
+        },
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/yan-template-next-2026",
+          "remote": "https://github.com/osmarpetry/yan-template-next-2026",
+          "branch": "main",
+          "dirty": 21
+        }
+      ],
+      "dirty_sources": [
+        {
+          "path": "/Users/osmar/workspace/osmarpetry/yan-template-next-2026",
+          "remote": "https://github.com/osmarpetry/yan-template-next-2026",
+          "branch": "main",
+          "dirty": 21
+        }
+      ]
+    },
+    {
+      "owner": "speechify-recruiting",
+      "name": "web-hp-functional-osmarpetry",
+      "remote": "git@github.com:speechify-recruiting/web-hp-functional-osmarpetry.git",
+      "ssh_remote": "git@github.com:speechify-recruiting/web-hp-functional-osmarpetry.git",
+      "target": "~/workspace/speechify-recruiting/web-hp-functional-osmarpetry",
+      "depth": 1,
+      "sources": [
+        {
+          "path": "/Users/osmar/workspace/speechify-recruiting/web-hp-functional-osmarpetry",
+          "remote": "git@github.com:speechify-recruiting/web-hp-functional-osmarpetry.git",
+          "branch": "main",
+          "dirty": 0
+        }
+      ],
+      "dirty_sources": []
+    }
+  ]
+}

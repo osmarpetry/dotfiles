@@ -1,0 +1,30 @@
+{
+  "generated_from": "/Users/osmar/workspace",
+  "policy": "archive_or_repair_remote_manually; do not clone automatically",
+  "local_only": [
+    {
+      "path": "/Users/osmar/workspace/find-pictures",
+      "remote": "",
+      "branch": "main",
+      "dirty": 2
+    },
+    {
+      "path": "/Users/osmar/workspace/gh/portifilio-SSG",
+      "remote": "",
+      "branch": "main",
+      "dirty": 12
+    },
+    {
+      "path": "/Users/osmar/workspace/jeff-claude",
+      "remote": "",
+      "branch": "main",
+      "dirty": 2
+    },
+    {
+      "path": "/Users/osmar/workspace/roast-my-landing-old",
+      "remote": "",
+      "branch": "master",
+      "dirty": 51
+    }
+  ]
+}

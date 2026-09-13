@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+# wm-add [--pick] [--] [branch]
+#   branch given -> workmux add <branch>
+#   no branch    -> read one from stdin (tmux command-prompt / popup)
+#   --pick       -> fzf over existing local and remote branches
+set -uo pipefail
+setopt extendedglob
+
+die() {
+  print -u2 -- "wm-add: $1"
+  [[ -n "${TMUX:-}" ]] && tmux display-message -d 4000 "wm-add: $1"
+  exit 1
+}
+
+pick=0
+while (( $# )); do
+  case "$1" in
+    --pick) pick=1; shift ;;
+    --)     shift; break ;;
+    -*)     die "unknown flag: $1" ;;
+    *)      break ;;
+  esac
+done
+
+if (( pick )); then
+  command -v fzf >/dev/null || die "fzf is not installed"
+  branch=$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
+    | sed 's#^origin/##' \
+    | grep -vx 'HEAD' \
+    | awk '!seen[$0]++' \
+    | fzf --prompt='worktree branch> ' --height=100% --border --no-multi) || exit 1
+else
+  branch="${1:-}"
+  [[ -n "$branch" ]] || IFS= read -r branch || true
+fi
+
+branch="${branch##[[:space:]]##}"
+branch="${branch%%[[:space:]]##}"
+[[ -n "$branch" ]] || die "no branch name given"
+
+exec workmux add "$branch"

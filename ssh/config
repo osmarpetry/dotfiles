@@ -1,0 +1,27 @@
+Include ~/dotfiles/local/ssh-config
+
+Host github-personal
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host github-work
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/tempo_id_rsa
+    IdentitiesOnly yes
+
+Host canvas.ssh.tempo.build
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ~/.ssh/tempo_id_rsa
+
+Host canvas.canvas-6cb9787c-76ac-408f-8185-02608312d9ae
+    HostName canvas.canvas-6cb9787c-76ac-408f-8185-02608312d9ae
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ~/.ssh/tempo_id_rsa
+    Port 22
+    ProxyJump 6cb9787c-76ac-408f-8185-02608312@canvas.ssh.tempo.build
