@@ -20,7 +20,36 @@ the `name:` field does. Current personas:
 | `verifier` | Evidence-first double-checking — reproduce a claim, verify a fix, adversarial review. Default: read-only. |
 | `maintainer` | Judgment calls — should this feature exist, is a PR correctly scoped, what to do about automated review noise. |
 | `issue-auditor` | Read-only: is a reported issue still valid against current code, find related PRs. |
-| `pr-auditor` | Read-only: prioritize open PRs across repos, or deep-review one PR against its linked YouTrack ticket. See `skills/dx/SKILL.md`'s "Revisão de PR" section for the underlying `dx pr` commands. |
+| `pr-auditor` | Read-only on GitHub/the tracker (does check branches out locally): prioritize open PRs across repos, assemble and check out a ticket's full cross-repo branch set, or deep-review one PR against its linked ticket. |
+
+### `pr-auditor` walkthrough — a full-stack project
+
+Generic, not tied to any one org/tracker — first use in a workspace asks
+what to configure. Worked example (real, tested against
+`~/workspace/deelan/`, three sibling repos — frontend, backend, Supabase):
+
+```sh
+# first time in a new workspace — teach it what this project looks like
+cd ~/workspace/deelan
+dx pr init --tracker youtrack --org Deelan-AI \
+  --repos deelan,deelan-backend,deelan-supabase \
+  --ticket-pattern '[A-Z]+-[0-9]+'
+
+# find every open PR/branch across repos for one ticket
+dx pr stack DEV-580
+
+# per PR: ticket + comments + related tickets + PR body + review comments
+dx pr context Deelan-AI/deelan#958
+```
+
+Ask Claude Code to "use the pr-auditor agent" (or just describe the task —
+"help me review DEV-580 across the deelan repos") and it takes it from
+there: runs the commands above, checks the resulting branches out locally
+(git worktrees, reusing one if it already exists, asking before forcing an
+update on anything dirty), reads each PR's diff with a QA-style eye, and
+drafts a PR description / test plan / "what the tracker says" summary. It
+stops there — running the stack and the real code review stay yours. Full
+behavior spec: `pr-auditor.md`.
 
 ## Adding a persona
 

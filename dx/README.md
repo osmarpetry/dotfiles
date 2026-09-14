@@ -96,22 +96,43 @@ dx seed nuxt@3.15.3 nuxt-ui@2.21.0 vue node python
 rsync -a ~/.cache/dx/ maquina-restrita:~/.cache/dx/
 ```
 
-## PRs ↔ YouTrack
+## PRs ↔ tickets
 
-`yt` (YouTrack CLI) não tem nenhum link nativo com PR/branch/VCS — a
-correlação é feita aqui batendo o padrão de ticket (`DEV-123`) contra o nome
-do branch ou o título do PR.
+Genérico — nada aqui é fixo a um org, tracker ou padrão de ticket
+específico. `yt` (YouTrack CLI) não tem nenhum link nativo com PR/branch/VCS
+— a correlação é feita batendo um padrão de ticket (configurável, ex.
+`DEV-123`) contra o branch ou o título do PR.
 
 ```sh
-dx pr show <owner/repo#N>      # PR + o ticket YouTrack ligado a ele
+# primeira vez num workspace novo — ensina o que esse projeto é
+cd ~/workspace/algum-projeto
+dx pr init --tracker youtrack --org MinhaOrg \
+  --repos repo-a,repo-b,repo-c --ticket-pattern '[A-Z]+-[0-9]+'
+
+dx pr show <owner/repo#N>      # PR + o ticket ligado a ele
 dx pr links <owner/repo#N>     # outros PRs abertos ligados ao MESMO ticket
+dx pr stack <ticket-ou-PR>     # todo branch, em todo repo configurado, ligado ao ticket
+dx pr context <owner/repo#N>   # PR (corpo+comentários+review) + ticket (comentários+relacionados)
 dx pr audit [--org O] [--repos r1,r2]
-                                # PRs abertos em todos os repos do org (default: Deelan-AI)
+                                # PRs abertos em todos os repos configurados
 ```
 
-`dx pr audit` só busca os dados brutos (PR + ticket extraído) — priorizar
-("isso é crítico", "isso está parado há uma semana") é julgamento do agente
-que consome a saída (persona `pr-auditor`), não lógica fixa aqui.
+`dx pr init` escreve `.pr-auditor.json` em `$PWD` (achado do mesmo jeito que
+`.dx.json` — `dx_find_up`, sobe diretórios até achar). Todo outro `dx pr`
+comando lê essa config em vez de assumir um org/tracker fixo; sem config,
+`show`/`context` degradam graciosamente (padrão `[A-Z]+-[0-9]+`, tracker
+`youtrack`), mas `links`/`stack`/`audit` (que precisam de org+repos pra
+buscar) exigem `dx pr init` primeiro.
+
+`dx pr audit`/`dx pr stack` só buscam os dados brutos — priorizar ("isso é
+crítico", "isso está parado há uma semana") é julgamento do agente que
+consome a saída (persona `pr-auditor`), não lógica fixa aqui.
+
+Exemplo real, testado contra o workspace `~/workspace/deelan/` (três repos
+irmãos — frontend, backend, Supabase): `dx pr stack DEV-580` retornou os 9
+PRs abertos ligados a esse ticket, todos no repo `deelan` nesse caso
+específico; `dx pr context Deelan-AI/deelan#958` trouxe corpo do PR,
+comentários, e o ticket YouTrack completo com seus links.
 
 `dx pr show`/`dx pr links` já foram testados contra dados reais do
 `Deelan-AI`; a query exata do `yt issues search` pode precisar de ajuste

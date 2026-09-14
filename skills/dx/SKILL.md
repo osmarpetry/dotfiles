@@ -77,18 +77,36 @@ Com `DX_OFFLINE=1` e cache frio, o comando sai com `exit 3` e lista o que existe
 Nesse caso **pergunte ao usuário** — não caia para a memória nem deduza a API do
 código ao redor.
 
-## Revisão de PR (YouTrack + GitHub)
+## Revisão de PR (tracker + GitHub)
+
+Sem config nenhuma é fixa — primeiro uso num workspace novo pede pra
+configurar (`dx pr init`), não assume org/tracker/padrão de ticket.
 
 ```bash
-dx pr show <owner/repo#N>      # o PR + o ticket YouTrack ligado a ele
+dx pr init --tracker youtrack --org O --repos r1,r2,r3 --ticket-pattern 'X'
+                                # uma vez por workspace (achado via dx_find_up,
+                                # igual .dx.json — sobe diretórios até achar)
+
+dx pr show <owner/repo#N>      # o PR + o ticket ligado a ele
 dx pr links <owner/repo#N>     # ANTES de aprovar: outros PRs abertos no MESMO ticket
-dx pr audit [--org O]          # visão geral dos PRs abertos no org (default: Deelan-AI)
+dx pr stack <ticket-ou-PR>     # todo branch, em todo repo, ligado a um ticket —
+                                # o que trazer junto pra rodar um projeto full-stack local
+dx pr context <owner/repo#N>   # corpo+comentários do PR (discussão e review inline) +
+                                # ticket+comentários+relacionados — pra escrever
+                                # descrição, plano de teste, ou revisar um PR de colega
+dx pr audit [--org O]          # visão geral dos PRs abertos nos repos configurados
 ```
 
 `yt` não liga PR a ticket nativamente — `dx pr` faz essa correlação batendo
-o padrão `DEV-123` no branch/título. Rode `dx pr links` antes de aprovar
-qualquer PR ligado a um ticket: um outro repo pode ter um PR pendente do
-mesmo ticket que muda o que "pronto para aprovar" significa aqui.
+o padrão do ticket (default `[A-Z]+-[0-9]+`, configurável) no branch/título.
+Rode `dx pr links` antes de aprovar qualquer PR ligado a um ticket: um outro
+repo pode ter um PR pendente do mesmo ticket que muda o que "pronto para
+aprovar" significa aqui.
+
+Sem `.pr-auditor.json` em nenhum diretório acima do `$PWD`, `show`/`context`
+caem pro padrão genérico (`youtrack`, `[A-Z]+-[0-9]+`); `links`/`stack`/`audit`
+(que precisam de org+repos) recusam com uma mensagem clara apontando pro
+`dx pr init` em vez de adivinhar.
 
 ## Limites
 

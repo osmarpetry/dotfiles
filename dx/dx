@@ -418,11 +418,103 @@ dx_doctor() {
 # yt (YouTrack CLI) has no PR/branch/VCS linking of its own (checked every
 # subcommand's --help) — correlation with GitHub is done here by matching a
 # ticket ID pattern (e.g. DEV-576) out of the branch name or PR title.
+#
+# Nothing here is hardcoded to one org/tracker/pattern. `dx pr init` writes
+# .pr-auditor.json in $PWD (found the same way .dx.json project pins are,
+# via dx_find_up) the first time a workspace needs one; every other `dx pr`
+# command reads it instead of guessing.
 
-DX_PR_TICKET_RE='[A-Z]+-[0-9]+'
+DX_PR_TICKET_RE_DEFAULT='[A-Z]+-[0-9]+'
 
 dx_pr_ticket_id() {
-  print -r -- "$1" | grep -oE "$DX_PR_TICKET_RE" | head -1
+  local text="$1" re="${2:-$DX_PR_TICKET_RE_DEFAULT}"
+  print -r -- "$text" | grep -oE "$re" | head -1
+}
+
+# tracker \t ticket_re \t org \t repos_csv — soft: defaults when no config exists.
+dx_pr_config_load_soft() {
+  local f
+  f=$(dx_find_up ".pr-auditor.json") || {
+    printf 'youtrack\t%s\t\t\n' "$DX_PR_TICKET_RE_DEFAULT"
+    return 0
+  }
+  jq -r --arg d "$DX_PR_TICKET_RE_DEFAULT" '
+    [(.tracker // "youtrack"), (.ticketPattern // $d), (.org // ""), ((.repos // []) | join(","))]
+    | @tsv' "$f"
+}
+
+# Same, but requires a real config — for commands that need org/repos to search.
+dx_pr_config_load() {
+  dx_find_up ".pr-auditor.json" >/dev/null \
+    || die "nenhuma config .pr-auditor.json encontrada aqui (rode: dx pr init)"
+  dx_pr_config_load_soft
+}
+
+dx_pr_init() {
+  local tracker="" org="" repos_csv="" ticket_re=""
+  while (( $# )); do
+    case "$1" in
+      --tracker)       tracker="$2"; shift 2 ;;
+      --org)           org="$2"; shift 2 ;;
+      --repos)         repos_csv="$2"; shift 2 ;;
+      --ticket-pattern) ticket_re="$2"; shift 2 ;;
+      *) die "flag desconhecida: $1 (dx pr init [--tracker T] [--org O] [--repos r1,r2] [--ticket-pattern P])" ;;
+    esac
+  done
+
+  if [[ -z "$tracker" ]]; then
+    print -n "tracker (youtrack/github) [youtrack]: "; read tracker
+    tracker="${tracker:-youtrack}"
+  fi
+  if [[ -z "$org" ]]; then
+    print -n "org/owner do GitHub: "; read org
+  fi
+  [[ -z "$org" ]] && die "org e obrigatorio"
+  if [[ -z "$repos_csv" ]]; then
+    print -n "repos (separados por virgula): "; read repos_csv
+  fi
+  [[ -z "$repos_csv" ]] && die "repos e obrigatorio"
+  if [[ -z "$ticket_re" ]]; then
+    print -n "padrao do ticket, regex [$DX_PR_TICKET_RE_DEFAULT]: "; read ticket_re
+    ticket_re="${ticket_re:-$DX_PR_TICKET_RE_DEFAULT}"
+  fi
+
+  local -a repos_arr; IFS=',' read -rA repos_arr <<< "$repos_csv"
+  local repos_json; repos_json=$(printf '%s\n' "${repos_arr[@]}" | jq -R . | jq -s .)
+  jq -n --arg tracker "$tracker" --arg org "$org" --arg pattern "$ticket_re" --argjson repos "$repos_json" \
+    '{tracker: $tracker, ticketPattern: $pattern, org: $org, repos: $repos}' > .pr-auditor.json
+  print -r -- "config escrita: $PWD/.pr-auditor.json"
+}
+
+# repo#num \t title \t url \t branch — every open PR across $org's configured
+# repos referencing $ticket. gh search prs has no headRefName field, so each
+# hit needs a follow-up gh pr view call.
+dx_pr_find_by_ticket() {
+  local ticket="$1" org="$2" hits
+  hits=$(gh search prs "$ticket" --owner "$org" --state open \
+    --json repository,number,title,url 2>/dev/null) || return 0
+  print -r -- "$hits" | jq -c '.[]' | while IFS= read -r hit; do
+    local repo=$(jq -r '.repository.name' <<<"$hit")
+    local num=$(jq -r '.number' <<<"$hit")
+    local title=$(jq -r '.title' <<<"$hit")
+    local url=$(jq -r '.url' <<<"$hit")
+    local branch=$(gh pr view "$num" -R "$org/$repo" --json headRefName --jq '.headRefName' 2>/dev/null)
+    printf '%s#%s\t%s\t%s\t%s\n' "$repo" "$num" "$title" "$url" "$branch"
+  done
+}
+
+dx_pr_show_ticket() {
+  local ticket="$1" tracker="$2"
+  case "$tracker" in
+    youtrack)
+      command -v yt >/dev/null 2>&1 || { note "yt nao encontrado no PATH"; return 0 }
+      yt issues search "$ticket" --format json --profile compact 2>/dev/null | dx_page
+      ;;
+    github)
+      gh issue view "$ticket" --json title,body,state,labels 2>/dev/null | jq . | dx_page
+      ;;
+    *) note "tracker desconhecido: $tracker" ;;
+  esac
 }
 
 dx_pr_show() {
@@ -434,45 +526,111 @@ dx_pr_show() {
     || die "PR nao encontrado: $ref"
   print -r -- "$pr_json" | jq .
 
+  local tracker ticket_re org repos_csv
+  IFS=$'\t' read -r tracker ticket_re org repos_csv <<< "$(dx_pr_config_load_soft)"
   branch=$(jq -r '.headRefName' <<<"$pr_json")
   title=$(jq -r '.title' <<<"$pr_json")
-  ticket=$(dx_pr_ticket_id "$branch $title")
+  ticket=$(dx_pr_ticket_id "$branch $title" "$ticket_re")
   if [[ -z "$ticket" ]]; then
-    note "nenhum ticket YouTrack encontrado no branch/titulo"
+    note "nenhum ticket encontrado no branch/titulo"
     return 0
   fi
   note "ticket: $ticket"
-  # `yt issues show` so aceita --format table|panel, nao json — usa search.
-  # Sintaxe de query exata a confirmar no primeiro uso real (nao testado
-  # contra uma instancia real ainda).
-  command -v yt >/dev/null 2>&1 \
-    && yt issues search "$ticket" --format json --profile compact 2>/dev/null | dx_page \
-    || note "yt nao encontrado no PATH"
+  dx_pr_show_ticket "$ticket" "$tracker"
 }
 
 dx_pr_links() {
-  local ref="${1:?uso: dx pr links <owner/repo#N> [org]}"
-  local org="${2:-Deelan-AI}"
+  local ref="${1:?uso: dx pr links <owner/repo#N>}"
   local repo="${ref%%#*}" num="${ref##*#}"
+  local tracker ticket_re org repos_csv
+  IFS=$'\t' read -r tracker ticket_re org repos_csv <<< "$(dx_pr_config_load)"
+
   local pr_json branch title ticket self
   pr_json=$(gh pr view "$num" -R "$repo" --json headRefName,title) || die "PR nao encontrado: $ref"
   branch=$(jq -r '.headRefName' <<<"$pr_json")
   title=$(jq -r '.title' <<<"$pr_json")
-  ticket=$(dx_pr_ticket_id "$branch $title")
-  [[ -z "$ticket" ]] && die "nenhum ticket YouTrack encontrado em $ref"
+  ticket=$(dx_pr_ticket_id "$branch $title" "$ticket_re")
+  [[ -z "$ticket" ]] && die "nenhum ticket encontrado em $ref"
 
   self="${repo#*/}#$num"
   note "buscando PRs abertos ligados a $ticket em $org..."
-  gh search prs "$ticket" --owner "$org" --state open \
-    --json repository,number,title,url 2>/dev/null \
-    | jq -r --arg self "$self" '
-        .[] | ((.repository.name) + "#" + (.number|tostring)) as $id
-        | select($id != $self)
-        | "\($id)\t\(.title)\t\(.url)"'
+  dx_pr_find_by_ticket "$ticket" "$org" | awk -F'\t' -v self="$self" 'BEGIN{OFS="\t"} $1 != self'
+}
+
+dx_pr_stack() {
+  local input="${1:?uso: dx pr stack <ticket-ou-owner/repo#N>}"
+  local tracker ticket_re org repos_csv
+  IFS=$'\t' read -r tracker ticket_re org repos_csv <<< "$(dx_pr_config_load)"
+
+  local ticket
+  if [[ "$input" == *#* ]]; then
+    local repo="${input%%#*}" num="${input##*#}" pr_json branch title
+    pr_json=$(gh pr view "$num" -R "$repo" --json headRefName,title) || die "PR nao encontrado: $input"
+    branch=$(jq -r '.headRefName' <<<"$pr_json")
+    title=$(jq -r '.title' <<<"$pr_json")
+    ticket=$(dx_pr_ticket_id "$branch $title" "$ticket_re")
+    [[ -z "$ticket" ]] && die "nenhum ticket encontrado em $input"
+  else
+    ticket="$input"
+  fi
+
+  note "branches ligados a $ticket em $org:"
+  dx_pr_find_by_ticket "$ticket" "$org" | sort -t$'\t' -k1,1 | awk -F'\t' '
+    { split($1, a, "#"); printf "%-18s %-30s #%-6s %s\n", a[1], $4, a[2], $3 }'
+}
+
+dx_pr_context() {
+  local ref="${1:?uso: dx pr context <owner/repo#N>}"
+  local repo="${ref%%#*}" num="${ref##*#}"
+  local tracker ticket_re org repos_csv
+  IFS=$'\t' read -r tracker ticket_re org repos_csv <<< "$(dx_pr_config_load_soft)"
+
+  print -r -- "=== PR ==="
+  local pr_json
+  pr_json=$(gh pr view "$num" -R "$repo" \
+    --json title,body,files,additions,deletions,changedFiles,comments,headRefName) \
+    || die "PR nao encontrado: $ref"
+  print -r -- "$pr_json" | jq .
+
+  print -r -- ""
+  print -r -- "=== review comments (inline) ==="
+  gh api "repos/$repo/pulls/$num/comments" 2>/dev/null \
+    | jq '[.[] | {path, line, body, user: .user.login}]'
+
+  local branch title ticket
+  branch=$(jq -r '.headRefName' <<<"$pr_json")
+  title=$(jq -r '.title' <<<"$pr_json")
+  ticket=$(dx_pr_ticket_id "$branch $title" "$ticket_re")
+  if [[ -z "$ticket" ]]; then
+    note "nenhum ticket encontrado no branch/titulo"
+    return 0
+  fi
+
+  print -r -- ""
+  print -r -- "=== ticket: $ticket ==="
+  case "$tracker" in
+    youtrack)
+      command -v yt >/dev/null 2>&1 || { note "yt nao encontrado no PATH"; return 0 }
+      yt issues search "$ticket" --format json --profile compact 2>/dev/null | jq .
+      print -r -- ""
+      print -r -- "--- comentarios do ticket ---"
+      yt issues comments list "$ticket" --format json 2>/dev/null | jq .
+      print -r -- ""
+      print -r -- "--- tickets relacionados (um nivel) ---"
+      yt issues links list "$ticket" --format json 2>/dev/null | jq .
+      ;;
+    github)
+      gh issue view "$ticket" --json title,body,state,labels,comments 2>/dev/null | jq .
+      ;;
+    *) note "tracker desconhecido: $tracker" ;;
+  esac
 }
 
 dx_pr_audit() {
-  local org="Deelan-AI" repos=()
+  local tracker ticket_re org repos_csv
+  IFS=$'\t' read -r tracker ticket_re org repos_csv <<< "$(dx_pr_config_load)"
+  local -a repos; [[ -n "$repos_csv" ]] && IFS=',' read -rA repos <<< "$repos_csv"
+
   while (( $# )); do
     case "$1" in
       --org)   org="$2"; shift 2 ;;
@@ -496,18 +654,21 @@ dx_pr_audit() {
     pr_list=$(gh pr list -R "$org/$repo" \
       --json number,title,headRefName,author,reviewDecision,mergeStateStatus,updatedAt 2>/dev/null) \
       || continue
-    print -r -- "$pr_list" | jq -r --arg repo "$repo" '
-      def ticket_id: [scan("[A-Z]+-[0-9]+")] | if length > 0 then .[0] else "-" end;
+    print -r -- "$pr_list" | jq -r --arg repo "$repo" --arg re "$ticket_re" '
+      def ticket_id: [scan($re)] | if length > 0 then .[0] else "-" end;
       .[] | "\($repo)#\(.number)\t\(.title)\t\((.headRefName + " " + .title) | ticket_id)\t\(.author.login)\t\(.reviewDecision // "PENDING")\t\(.mergeStateStatus)\t\(.updatedAt)"'
   done
 }
 
 dx_pr() {
   case "${1:-}" in
-    show)  shift; dx_pr_show "$@" ;;
-    links) shift; dx_pr_links "$@" ;;
-    audit) shift; dx_pr_audit "$@" ;;
-    *) die "uso: dx pr show|links|audit ... (dx --help)" ;;
+    init)    shift; dx_pr_init "$@" ;;
+    show)    shift; dx_pr_show "$@" ;;
+    links)   shift; dx_pr_links "$@" ;;
+    stack)   shift; dx_pr_stack "$@" ;;
+    context) shift; dx_pr_context "$@" ;;
+    audit)   shift; dx_pr_audit "$@" ;;
+    *) die "uso: dx pr init|show|links|stack|context|audit ... (dx --help)" ;;
   esac
 }
 

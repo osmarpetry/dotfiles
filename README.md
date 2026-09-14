@@ -56,6 +56,25 @@ apps in `binary-apps/`).
 | `docs/` | Migration checklist, per-app notes, superseded planning doc |
 | `tests/` | Hand-rolled, dependency-free `*.zsh` tests — run each directly |
 
+## Using the agents and skills
+
+`link.sh` only covers getting these onto disk in the right place — this is
+how to actually use them once they're there.
+
+- **Skills** (`skills/`) mostly load themselves — Claude Code picks the
+  relevant one based on what you're asking for (each `SKILL.md`'s
+  `description` is the trigger). You can also ask for one by name: "use the
+  dx skill to check this" or "load find-skills."
+- **Personas** (`agents/personas/`) are custom subagents — ask for one by
+  name and Claude Code dispatches it: "use the pr-auditor agent to review
+  DEV-580" or "use the verifier agent to double-check this fix." They don't
+  self-trigger the way skills do; you (or the main agent, when it judges one
+  fits) have to name one.
+
+Full command reference and a worked full-stack example (`pr-auditor`
+assembling a cross-repo branch set from one ticket):
+`agents/personas/README.md`.
+
 ## Personal vs. work identity
 
 Personal identity is the default everywhere. A work override only kicks in
