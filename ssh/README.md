@@ -40,6 +40,15 @@ subtree to "match" this scheme — they're already fine where they are
 (`~/workspace/<owner>/<repo>`, driven by `manifests/repos.json`). This split
 exists for the next repo that actually needs it, not retroactively.
 
+**Same shape as asdf, if that mental model already clicks**: asdf has a
+global default (`~/.tool-versions`) and a local override (a project's own
+`.tool-versions`, only when that project needs a different version). SSH
+identity here works the same way — `id_ed25519` is the global default
+everywhere, `github-work`/`tempo_id_rsa` is the local override, active only
+under `~/workspace/work/**`. Nothing project-specific means the global
+default applies, exactly like asdf falling through to `~/.tool-versions`
+when a project has no local one.
+
 ## Commit signing
 
 `allowed_signers` holds the public key used to verify your own commit

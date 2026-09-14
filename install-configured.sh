@@ -15,7 +15,7 @@ setup_brew_configured() {
 
 setup_apt_configured() {
   is_linux || return 0
-  run sudo apt-get install -y tmux zsh-syntax-highlighting neovim fzf ripgrep jq
+  run sudo apt-get install -y tmux zsh-syntax-highlighting neovim fzf ripgrep jq pipx
 }
 
 setup_zsh() {
@@ -117,6 +117,13 @@ setup_zed() {
   run sh "$DOTFILES/zed/install.sh"
 }
 
+setup_youtrack_cli() {
+  command -v yt >/dev/null 2>&1 && { log "skip: yt already installed"; return 0; }
+  command -v pipx >/dev/null 2>&1 || { log "skip: youtrack-cli (pipx not installed)"; return 0; }
+  run pipx install youtrack-cli
+  log "run 'yt auth login' once to authenticate (manual, needs your YouTrack URL + token)"
+}
+
 setup_brew_configured
 setup_apt_configured
 setup_zsh
@@ -125,5 +132,6 @@ setup_tmux
 setup_dx
 setup_clop
 setup_zed
+setup_youtrack_cli
 
 log "install-configured.sh done"

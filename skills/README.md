@@ -25,13 +25,32 @@ upstream repo's default branch today.
 `temporal-workflow-design-critic`, `test-guard`, `verification-before-completion`,
 `vue-best-practices`, `vue-debug-guides`, `vue-testing-best-practices`.
 
+## Vendored vs. custom
+
+Two kinds of skill live in this same flat folder, and both work identically
+once installed — the only difference is where updates come from:
+
+- **Vendored** — everything listed above, tracked in `.skill-lock.json`,
+  sourced from a public upstream repo. Update by pulling a newer version
+  into your live `~/.agents/skills`, then `--export` to refresh the vendored
+  copy here.
+- **Custom** — your own skills, authored directly under `skills/<name>/` in
+  this repo. No entry needed in `.skill-lock.json` — `sync_skills.zsh`'s
+  `copy_tree` copies every directory under `skills/` regardless of whether
+  it's in the lock file, so a custom skill installs and symlinks exactly
+  like a vendored one. It just never gets touched by any upstream sync,
+  since there's no upstream to sync from. To add one: create
+  `skills/my-skill/SKILL.md` with frontmatter (`name`, `description`) and
+  run `--install` — that's the whole mechanism, nothing else to wire up.
+
 ## Adding/removing
 
 ```sh
-./scripts/sync_skills.zsh --export    # snapshot machine -> repo
-./scripts/sync_skills.zsh --install   # restore repo -> machine
+./scripts/sync_skills.zsh --export    # snapshot machine -> repo (vendored only)
+./scripts/sync_skills.zsh --install   # restore repo -> machine (vendored + custom)
 ```
 
-To drop a skill you no longer want: delete `~/.agents/skills/<name>` on the
-machine, then `--export` to update the vendored copy — or delete the vendored
-folder directly and `--install` to remove the stale symlink.
+To drop a vendored skill you no longer want: delete `~/.agents/skills/<name>`
+on the machine, then `--export` to update the vendored copy — or delete the
+vendored folder directly and `--install` to remove the stale symlink. To drop
+a custom skill: delete `skills/<name>/` directly, then `--install`.

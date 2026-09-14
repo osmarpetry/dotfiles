@@ -39,7 +39,7 @@ Para avaliar um upgrade, leia os dois e compare — não deduza o diff de cabeç
 `node`, `python`, `go`, `deno`, `uv`, `pnpm`.
 
 Se a lib não estiver no registry, aí sim WebFetch — e sugira ao usuário adicioná-la
-em `~/dotfiles/scripts/dx/registry.tsv`.
+em `~/dotfiles/dx/registry.tsv`.
 
 ## CLIs
 
@@ -76,6 +76,19 @@ onde está o guia de migração no doc em cache — não só "está desatualizad
 Com `DX_OFFLINE=1` e cache frio, o comando sai com `exit 3` e lista o que existe.
 Nesse caso **pergunte ao usuário** — não caia para a memória nem deduza a API do
 código ao redor.
+
+## Revisão de PR (YouTrack + GitHub)
+
+```bash
+dx pr show <owner/repo#N>      # o PR + o ticket YouTrack ligado a ele
+dx pr links <owner/repo#N>     # ANTES de aprovar: outros PRs abertos no MESMO ticket
+dx pr audit [--org O]          # visão geral dos PRs abertos no org (default: Deelan-AI)
+```
+
+`yt` não liga PR a ticket nativamente — `dx pr` faz essa correlação batendo
+o padrão `DEV-123` no branch/título. Rode `dx pr links` antes de aprovar
+qualquer PR ligado a um ticket: um outro repo pode ter um PR pendente do
+mesmo ticket que muda o que "pronto para aprovar" significa aqui.
 
 ## Limites
 

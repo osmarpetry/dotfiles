@@ -19,3 +19,9 @@ repo actually shows up. See `ssh/README.md` for the matching SSH side
 
 SSH commit signing is on by default (`gpg.format = ssh`, signed with
 `id_ed25519`, verified against `ssh/allowed_signers`).
+
+**Same shape as asdf**: global default (`~/.tool-versions`) + local override
+(a project's own `.tool-versions`). Here, the base `[user]` block is the
+global default and `includeIf gitdir:~/workspace/work/**` is the local
+override — a repo outside that path just falls through to the global
+identity, same as asdf falling through when there's no local pin.

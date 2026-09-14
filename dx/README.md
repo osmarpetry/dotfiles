@@ -96,6 +96,27 @@ dx seed nuxt@3.15.3 nuxt-ui@2.21.0 vue node python
 rsync -a ~/.cache/dx/ maquina-restrita:~/.cache/dx/
 ```
 
+## PRs ↔ YouTrack
+
+`yt` (YouTrack CLI) não tem nenhum link nativo com PR/branch/VCS — a
+correlação é feita aqui batendo o padrão de ticket (`DEV-123`) contra o nome
+do branch ou o título do PR.
+
+```sh
+dx pr show <owner/repo#N>      # PR + o ticket YouTrack ligado a ele
+dx pr links <owner/repo#N>     # outros PRs abertos ligados ao MESMO ticket
+dx pr audit [--org O] [--repos r1,r2]
+                                # PRs abertos em todos os repos do org (default: Deelan-AI)
+```
+
+`dx pr audit` só busca os dados brutos (PR + ticket extraído) — priorizar
+("isso é crítico", "isso está parado há uma semana") é julgamento do agente
+que consome a saída (persona `pr-auditor`), não lógica fixa aqui.
+
+`dx pr show`/`dx pr links` já foram testados contra dados reais do
+`Deelan-AI`; a query exata do `yt issues search` pode precisar de ajuste
+conforme aparecerem mais casos.
+
 ## Cuidados
 
 - O L1 executa `--help` em cada binário sem man page. É execução de código, ainda que

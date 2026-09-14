@@ -130,6 +130,11 @@ Todo 8.4 — Verify: built-in mic stays default input when a Bluetooth/USB
 device connects; a test calendar event triggers a 5-minute-before
 notification and opens its URL at start time. Decision: approved
 
+Todo 8.5 — `install-configured.sh`'s `setup_youtrack_cli()` installs `yt`
+(YouTrack CLI) via `pipx install youtrack-cli`. Run `yt auth login` once by
+hand afterward (manual — needs your YouTrack instance URL + API token
+entered interactively, cannot be automated). Decision: approved
+
 ## Step 9: AeroSpace
 
 Todo 9.1 — Install AeroSpace via `nikitabobko/tap/aerospace`. Decision: approved

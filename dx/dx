@@ -414,6 +414,103 @@ dx_doctor() {
   print -r -- "doc da versão nova:  dx doc <slug>@latest"
 }
 
+# ------------------------------------------------------------------ PR/YT ----
+# yt (YouTrack CLI) has no PR/branch/VCS linking of its own (checked every
+# subcommand's --help) — correlation with GitHub is done here by matching a
+# ticket ID pattern (e.g. DEV-576) out of the branch name or PR title.
+
+DX_PR_TICKET_RE='[A-Z]+-[0-9]+'
+
+dx_pr_ticket_id() {
+  print -r -- "$1" | grep -oE "$DX_PR_TICKET_RE" | head -1
+}
+
+dx_pr_show() {
+  local ref="${1:?uso: dx pr show <owner/repo#N>}"
+  local repo="${ref%%#*}" num="${ref##*#}"
+  local pr_json branch title ticket
+  pr_json=$(gh pr view "$num" -R "$repo" \
+    --json number,title,headRefName,author,reviewDecision,isDraft,mergeStateStatus,statusCheckRollup,url) \
+    || die "PR nao encontrado: $ref"
+  print -r -- "$pr_json" | jq .
+
+  branch=$(jq -r '.headRefName' <<<"$pr_json")
+  title=$(jq -r '.title' <<<"$pr_json")
+  ticket=$(dx_pr_ticket_id "$branch $title")
+  if [[ -z "$ticket" ]]; then
+    note "nenhum ticket YouTrack encontrado no branch/titulo"
+    return 0
+  fi
+  note "ticket: $ticket"
+  # `yt issues show` so aceita --format table|panel, nao json — usa search.
+  # Sintaxe de query exata a confirmar no primeiro uso real (nao testado
+  # contra uma instancia real ainda).
+  command -v yt >/dev/null 2>&1 \
+    && yt issues search "$ticket" --format json --profile compact 2>/dev/null | dx_page \
+    || note "yt nao encontrado no PATH"
+}
+
+dx_pr_links() {
+  local ref="${1:?uso: dx pr links <owner/repo#N> [org]}"
+  local org="${2:-Deelan-AI}"
+  local repo="${ref%%#*}" num="${ref##*#}"
+  local pr_json branch title ticket self
+  pr_json=$(gh pr view "$num" -R "$repo" --json headRefName,title) || die "PR nao encontrado: $ref"
+  branch=$(jq -r '.headRefName' <<<"$pr_json")
+  title=$(jq -r '.title' <<<"$pr_json")
+  ticket=$(dx_pr_ticket_id "$branch $title")
+  [[ -z "$ticket" ]] && die "nenhum ticket YouTrack encontrado em $ref"
+
+  self="${repo#*/}#$num"
+  note "buscando PRs abertos ligados a $ticket em $org..."
+  gh search prs "$ticket" --owner "$org" --state open \
+    --json repository,number,title,url 2>/dev/null \
+    | jq -r --arg self "$self" '
+        .[] | ((.repository.name) + "#" + (.number|tostring)) as $id
+        | select($id != $self)
+        | "\($id)\t\(.title)\t\(.url)"'
+}
+
+dx_pr_audit() {
+  local org="Deelan-AI" repos=()
+  while (( $# )); do
+    case "$1" in
+      --org)   org="$2"; shift 2 ;;
+      --repos) IFS=',' read -rA repos <<<"$2"; shift 2 ;;
+      *) die "flag desconhecida: $1 (dx pr audit [--org ORG] [--repos r1,r2,...])" ;;
+    esac
+  done
+
+  if (( ${#repos} == 0 )); then
+    repos=($(gh repo list "$org" --limit 100 --json name,isArchived \
+      --jq '.[] | select(.isArchived|not) | .name'))
+  fi
+  (( ${#repos} )) || die "nenhum repo encontrado em $org"
+
+  # So busca dados brutos aqui: PR + ticket extraido. Priorizar (Critical /
+  # Needs re-review / Stale / etc.) e' julgamento do agente (persona
+  # pr-auditor), nao logica fixa em shell.
+  printf 'repo#pr\ttitle\tticket\tauthor\treview\tmerge_state\tupdated_at\n'
+  local repo pr_list
+  for repo in $repos; do
+    pr_list=$(gh pr list -R "$org/$repo" \
+      --json number,title,headRefName,author,reviewDecision,mergeStateStatus,updatedAt 2>/dev/null) \
+      || continue
+    print -r -- "$pr_list" | jq -r --arg repo "$repo" '
+      def ticket_id: [scan("[A-Z]+-[0-9]+")] | if length > 0 then .[0] else "-" end;
+      .[] | "\($repo)#\(.number)\t\(.title)\t\((.headRefName + " " + .title) | ticket_id)\t\(.author.login)\t\(.reviewDecision // "PENDING")\t\(.mergeStateStatus)\t\(.updatedAt)"'
+  done
+}
+
+dx_pr() {
+  case "${1:-}" in
+    show)  shift; dx_pr_show "$@" ;;
+    links) shift; dx_pr_links "$@" ;;
+    audit) shift; dx_pr_audit "$@" ;;
+    *) die "uso: dx pr show|links|audit ... (dx --help)" ;;
+  esac
+}
+
 # --------------------------------------------------------------- refresh -----
 
 dx_refresh() {
@@ -474,6 +571,11 @@ dx - docs offline, versionados pelo seu projeto
   dx seed <slug>@<ver>    pre-baixa doc (para usar depois sem rede)
   dx ls                   registry + cache
   dx refresh              job diario (launchd)
+
+  dx pr show <o/r#N>      PR + ticket YouTrack ligado (branch/titulo)
+  dx pr links <o/r#N>     PRs abertos no mesmo ticket, em outros repos
+  dx pr audit [--org O] [--repos r1,r2]
+                          PRs abertos em todos os repos do org (default: Deelan-AI)
 USAGE
 }
 
@@ -487,6 +589,7 @@ case "${1:-}" in
   refresh)  shift; dx_refresh "$@" ;;
   seed)     shift; dx_seed "$@" ;;
   ls)       shift; dx_ls "$@" ;;
+  pr)       shift; dx_pr "$@" ;;
   ""|-h|--help) dx_usage ;;
   *)        die "comando desconhecido: $1 (dx --help)" ;;
 esac

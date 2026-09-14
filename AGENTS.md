@@ -8,6 +8,22 @@
 - **Never assume the next assumption — ask me.** Judgment calls inside the stated
   scope are yours. Anything that widens, narrows, or reinterprets the scope stops
   and asks. When you do assume, say so out loud in the same message.
+- **DRY has limits.** It applies to pure functions and genuinely reusable
+  components. Don't force a shared abstraction onto a complex component built
+  for one specific need — a little duplication in a single-purpose,
+  complicated piece beats a wrong abstraction that has to flex for cases that
+  don't actually recur.
+- **Consider a named pattern before inventing structure.** When planning a
+  new task or diagnosing a bug, check whether a known pattern (Gang of Four)
+  fits. Name the pattern you're using — or the one you considered and
+  rejected, and why — rather than silently picking a shape.
+- **Debug with a debugger, not print statements.** Prefer a real debugger
+  over `console.log`/`print` when the repo has one available — breakpoints
+  and step-through beat scattering print statements. Pair TDD's red/green
+  cycle with debugger-driven diagnosis: the failing test tells you *what*
+  broke, the debugger tells you *why*. Check `dx man <tool>` for a debugger
+  CLI's actual flags before guessing, and `docs/debugging.md` for the
+  per-stack workflow.
 
 ## Docs before code
 
