@@ -21,6 +21,10 @@ confirm_dir() {
 }
 
 # link SRC DEST — symlink SRC at DEST, backing up a pre-existing real file once.
+# Backups go to $DOTFILES/local/backups/, never as a sibling of dest — a
+# sibling *.pre-dotfiles.bak next to a real file inside a directory Claude
+# Code scans (~/.claude/skills/, ~/.claude/agents/) gets picked up as a
+# bogus extra skill/agent, which actually happened the first time this ran.
 link() {
   src="$1"
   dest="$2"
@@ -33,8 +37,11 @@ link() {
   fi
   confirm_dir "$(dirname "$dest")"
   if [ -e "$dest" ] && [ ! -L "$dest" ]; then
-    mv "$dest" "$dest.pre-dotfiles.bak"
-    log "backed up existing $dest -> $dest.pre-dotfiles.bak"
+    backup_dir="$DOTFILES/local/backups"
+    confirm_dir "$backup_dir"
+    backup_name=$(printf '%s' "$dest" | sed 's#^/##; s#/#_#g')
+    mv "$dest" "$backup_dir/$backup_name"
+    log "backed up existing $dest -> $backup_dir/$backup_name"
   fi
   ln -sfn "$src" "$dest"
   log "linked $dest -> $src"
