@@ -21,6 +21,7 @@ the `name:` field does. Current personas:
 | `maintainer` | Judgment calls — should this feature exist, is a PR correctly scoped, what to do about automated review noise. |
 | `issue-auditor` | Read-only: is a reported issue still valid against current code, find related PRs. |
 | `pr-auditor` | Read-only on GitHub/the tracker (does check branches out locally): prioritize open PRs across repos, assemble and check out a ticket's full cross-repo branch set, or deep-review one PR against its linked ticket. |
+| `gh-stack-reconciler` | Read-only diagnosis, confirmed fast-forward pushes: fixes gh-stack PRs stuck open because their code landed in trunk outside the stack's own merge tooling. |
 
 ### `pr-auditor` walkthrough — a full-stack project
 
