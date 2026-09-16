@@ -17,6 +17,12 @@ state.
 
 ## Before anything: confirm `gh`/`gh stack` currency via `dx`
 
+**`dx` covers `git`, `github` and `gh` docs — always reach for it first.**
+`dx man git`, `dx man gh`, `dx man gh-pr`, `dx ls` to see what's cached. It
+comes before WebFetch, WebSearch and recall for any question about git
+plumbing, GitHub behavior, or a `gh` flag. Don't guess a flag or a merge
+semantic from memory when `dx` has the pinned answer.
+
 This file bakes in specific GitHub error strings and CLI flags observed on
 one date. The `gh` CLI and the `gh stack` extension both ship updates, and
 error wording or flag behavior can drift. Per the working agreement, `dx`
@@ -109,6 +115,14 @@ head, and GitHub flips that PR to Merged within seconds.
 
 ## Mandatory safety checks, every hop
 
+- **Never push directly to `staging` or `main`/`trunk` — they're protected
+  branches.** The fast-forward technique in this doc only ever targets a
+  PR's own *intermediate* base ref (the next branch up the stack, e.g.
+  `DEV-481`, `DEV-482`) — never the protected trunk itself. If the bottom
+  hop of a stack would require writing straight to `staging`/`main` to flip
+  its PR, that hop is out of scope for this technique: leave it, and tell
+  the user to close/merge it through the normal protected-branch path
+  (PR merge button), not `git push` from a terminal.
 - **Diagnose first, per branch:** `git merge-base --is-ancestor
   <branch-tip> <trunk-tip>` — never trust the "Ready" badge.
 - **Before every push, verify the fast-forward is clean:** `git merge-base
