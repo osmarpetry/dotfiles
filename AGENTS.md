@@ -68,3 +68,12 @@ code. A branch carrying too much context is a delivery problem, not a review pro
 
 `caveman` and KISS are the point. Short, dense, technically exact. No filler, no
 restating my request back to me, no summarizing what you are about to do.
+
+- **Never hard-wrap prose.** Every paragraph you write for me to read — chat
+  replies, plan-mode text, PR/issue descriptions, comments, explanations of
+  any kind — is one unbroken line, however long, with no manual line break
+  mid-paragraph. A blank line between paragraphs is real structure, keep
+  that. Code blocks, tables, and list items keep their own line breaks. This
+  does not apply to files meant to be hand-edited in an editor — this file,
+  commit messages, code comments — which keep their existing wrap
+  conventions.
