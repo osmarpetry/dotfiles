@@ -94,6 +94,8 @@ Full checklist for a from-scratch machine: `less docs/WORKSTATION_TODO.md`.
 
 ## tmux worktree workflow
 
+TODO: sesh be in dotfiles instead of .config, as symbolic links
+
 `workmux` drives git worktrees and tmux targets; the tmux layer here puts the
 same actions behind two discovery surfaces.
 
