@@ -8,3 +8,16 @@ local/*
 # Exceeds GitHub's 100MB per-file push limit — stays local-only, see
 # binary-apps/README.md.
 binary-apps/archives/Qwen.app.zip
+
+# Cheap first layer against an accidentally staged secret. Only stops
+# *untracked* files — git add -f walks straight past it. gitleaks
+# (git/hooks/pre-commit) is the real backstop.
+id_ed25519
+id_rsa
+tempo_id_rsa
+*.pem
+*.p12
+*.pfx
+*.key
+.env
+.env.*

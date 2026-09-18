@@ -20,6 +20,12 @@ repo actually shows up. See `ssh/README.md` for the matching SSH side
 SSH commit signing is on by default (`gpg.format = ssh`, signed with
 `id_ed25519`, verified against `ssh/allowed_signers`).
 
+`hooks/pre-commit` runs `gitleaks git --staged` and blocks a commit that
+stages a secret. `./setup.sh` points `core.hooksPath` at `git/hooks`, but
+only in this repo's own `.git/config` — not via the globally-symlinked
+`gitconfig` above, so no other repo on the machine picks it up. A fresh
+clone has no hook until `./setup.sh` runs once.
+
 **Same shape as asdf**: global default (`~/.tool-versions`) + local override
 (a project's own `.tool-versions`). Here, the base `[user]` block is the
 global default and `includeIf gitdir:~/workspace/work/**` is the local

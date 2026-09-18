@@ -5,11 +5,16 @@
 set -eu
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+. "$DOTFILES/lib.sh"
 
 sh "$DOTFILES/install-essential.sh" "$@"
 sh "$DOTFILES/link.sh" "$@"
 sh "$DOTFILES/install-configured.sh" "$@"
 sh "$DOTFILES/install-optional.sh" "$@"
+
+# Local to this repo's own .git/config, not the globally-symlinked
+# git/gitconfig — a fresh clone has no hook until this runs.
+(cd "$DOTFILES" && run git config --local core.hooksPath git/hooks)
 
 dry_run=0
 for arg in "$@"; do

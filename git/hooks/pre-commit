@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+# Blocks a commit that stages a secret. Backstop behind .gitignore, which
+# only stops untracked files and does nothing against `git add -f`.
+#
+# `git commit -m` is deliberately not scanned for prose wrap or anything
+# else here — this hook exists for one job, secrets.
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not installed, skipping secret scan (run ./setup.sh)" >&2
+  exit 0
+fi
+
+gitleaks git --staged --redact
