@@ -1,19 +1,14 @@
 # agents/personas
 
-Custom Claude Code subagents — different "personalities" you can dispatch by
-name, on top of the built-in `general-purpose` and `claude-code-guide` agents.
+Custom Claude Code subagents — different "personalities" you can dispatch by name, on top of the built-in `general-purpose` and `claude-code-guide` agents.
 
-This is Claude-Code-specific. Codex has no equivalent concept, so unlike
-`AGENTS.md` this folder isn't dual-purposed — it only matters to Claude Code.
+This is Claude-Code-specific. Codex has no equivalent concept, so unlike `AGENTS.md` this folder isn't dual-purposed — it only matters to Claude Code.
 
-`link.sh` symlinks this whole directory to `~/.claude/agents`, so a new file
-dropped here is picked up without re-running setup.
+`link.sh` symlinks this whole directory to `~/.claude/agents`, so a new file dropped here is picked up without re-running setup.
 
 ## Invoking a persona
 
-Claude Code's Task/Agent tool picks a subagent by matching `subagent_type`
-against a persona file's frontmatter `name:` — the filename doesn't matter,
-the `name:` field does. Current personas:
+Claude Code's Task/Agent tool picks a subagent by matching `subagent_type` against a persona file's frontmatter `name:` — the filename doesn't matter, the `name:` field does. Current personas:
 
 | `name:` | For |
 |---|---|
@@ -27,9 +22,7 @@ the `name:` field does. Current personas:
 
 ### `pr-auditor` walkthrough — a full-stack project
 
-Generic, not tied to any one org/tracker — first use in a workspace asks
-what to configure. Worked example (real, tested against
-`~/workspace/deelan/`, three sibling repos — frontend, backend, Supabase):
+Generic, not tied to any one org/tracker — first use in a workspace asks what to configure. Worked example (real, tested against `~/workspace/deelan/`, three sibling repos — frontend, backend, Supabase):
 
 ```sh
 # first time in a new workspace — teach it what this project looks like
@@ -45,14 +38,7 @@ dx pr stack DEV-580
 dx pr context Deelan-AI/deelan#958
 ```
 
-Ask Claude Code to "use the pr-auditor agent" (or just describe the task —
-"help me review DEV-580 across the deelan repos") and it takes it from
-there: runs the commands above, checks the resulting branches out locally
-(git worktrees, reusing one if it already exists, asking before forcing an
-update on anything dirty), reads each PR's diff with a QA-style eye, and
-drafts a PR description / test plan / "what the tracker says" summary. It
-stops there — running the stack and the real code review stay yours. Full
-behavior spec: `pr-auditor.md`.
+Ask Claude Code to "use the pr-auditor agent" (or just describe the task — "help me review DEV-580 across the deelan repos") and it takes it from there: runs the commands above, checks the resulting branches out locally (git worktrees, reusing one if it already exists, asking before forcing an update on anything dirty), reads each PR's diff with a QA-style eye, and drafts a PR description / test plan / "what the tracker says" summary. It stops there — running the stack and the real code review stay yours. Full behavior spec: `pr-auditor.md`.
 
 ## Adding a persona
 
@@ -70,6 +56,4 @@ the code does, no "great job" — just the defects, one line each, file:line.
 
 `example-persona.md` is a minimal starter — duplicate it, don't keep it as-is.
 
-Per `docs/PLAN.md`'s framing: agents carry judgment, skills carry procedure.
-If what you're writing is a repeatable operational runbook, it belongs in
-`skills/` instead.
+Per `docs/PLAN.md`'s framing: agents carry judgment, skills carry procedure. If what you're writing is a repeatable operational runbook, it belongs in `skills/` instead.

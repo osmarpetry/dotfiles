@@ -1,9 +1,6 @@
 # binary-apps
 
-Apps with no Homebrew (or nix) package. No zip backups here — `install-optional.sh`
-just opens the download page for anything with a known URL, so you grab a
-current build instead of a stale one. Install is a manual drag-to-Applications
-after that; not worth scripting `.dmg` mounting for a handful of apps.
+Apps with no Homebrew (or nix) package. No zip backups here — `install-optional.sh` just opens the download page for anything with a known URL, so you grab a current build instead of a stale one. Install is a manual drag-to-Applications after that; not worth scripting `.dmg` mounting for a handful of apps.
 
 | App | Status |
 |---|---|
@@ -16,5 +13,4 @@ after that; not worth scripting `.dmg` mounting for a handful of apps.
 
 `RealTimeSync.app` needs no entry — it ships bundled inside FreeFileSync.
 
-`install-optional.sh` runs `open <url>` for every entry with a known URL
-above. Entries with no reliable URL just print a reminder to install by hand.
+`install-optional.sh` runs `open <url>` for every entry with a known URL above. Entries with no reliable URL just print a reminder to install by hand.

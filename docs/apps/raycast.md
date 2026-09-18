@@ -1,9 +1,6 @@
 # Raycast
 
-Full export/import uses an encrypted `.rayconfig` and restores settings,
-aliases, and hotkeys wholesale. Deliberately not used here — too much
-surface, includes token fields. Instead, only hotkeys are tracked, and
-recreated by hand.
+Full export/import uses an encrypted `.rayconfig` and restores settings, aliases, and hotkeys wholesale. Deliberately not used here — too much surface, includes token fields. Instead, only hotkeys are tracked, and recreated by hand.
 
 Source: https://manual.raycast.com/import-export
 
@@ -35,6 +32,4 @@ Source: https://manual.raycast.com/import-export
 | Clipboard History | enabled, no hotkey |
 | Raycast AI | enabled, no hotkey |
 
-Full list also lives in `manifests/raycast_shortcuts.yml`. Disable or leave
-unconfigured everything else. Verify in Raycast Settings with
-"Show only customized" enabled.
+Full list also lives in `manifests/raycast_shortcuts.yml`. Disable or leave unconfigured everything else. Verify in Raycast Settings with "Show only customized" enabled.

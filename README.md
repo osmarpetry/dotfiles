@@ -1,15 +1,10 @@
 # osmar dotfiles
 
-Mac (primary) and Linux workstation setup — plain shell scripts and
-symlinks, no ansible, no framework.
+Mac (primary) and Linux workstation setup — plain shell scripts and symlinks, no ansible, no framework.
 
 ## Platform support
 
-**macOS is the primary target** — package installs use Homebrew, plus
-Mac-only tooling (Hammerspoon, AeroSpace, Clop, `.app` backups in
-`binary-apps/`). **On Linux**, `setup.sh` uses `apt` instead and
-automatically skips every Mac-only step (no error, just a log line) — tmux,
-zsh, nvim, ssh, git identity, and skills/agents all still work there.
+**macOS is the primary target** — package installs use Homebrew, plus Mac-only tooling (Hammerspoon, AeroSpace, Clop, `.app` backups in `binary-apps/`). **On Linux**, `setup.sh` uses `apt` instead and automatically skips every Mac-only step (no error, just a log line) — tmux, zsh, nvim, ssh, git identity, and skills/agents all still work there.
 
 ## Run it
 
@@ -18,28 +13,15 @@ zsh, nvim, ssh, git identity, and skills/agents all still work there.
 ./setup.sh              # do it
 ```
 
-Runs, in order: `install-essential.sh` (Homebrew/apt bootstrap) →
-`link.sh` (symlink every managed config into place) →
-`install-configured.sh` (apps this repo also configures) →
-`install-optional.sh` (everything else, plus opening download pages for
-apps in `binary-apps/`).
+Runs, in order: `install-essential.sh` (Homebrew/apt bootstrap) → `link.sh` (symlink every managed config into place) → `install-configured.sh` (apps this repo also configures) → `install-optional.sh` (everything else, plus opening download pages for apps in `binary-apps/`).
 
 ## What this does not automate
 
-- **SSH private keys** — never touch this repo, not even encrypted. Copied
-  in by hand on a new machine. See `ssh/README.md`.
-- A handful of apps with no Homebrew cask and no config to restore — see
-  `docs/apps/` and `binary-apps/README.md`. Install is a manual drag to
-  `/Applications` after `install-optional.sh` opens the download page.
-- Machine-migration backups (unpushed git branches, `.env` secrets) are
-  scripts you run deliberately before wiping a machine, not part of
-  `setup.sh` — see `scripts/backup_unpushed_repos.zsh`,
-  `scripts/backup_dotenv_files.zsh`.
-- A full move to a new machine — workspace repos, SSH keys, Claude
-  auto-memory, bundled into one passphrase-encrypted archive — see
-  `docs/MACHINE_EXPORT.md`.
-- Scratch-workspace (`lixo`) backup lives in a personal cloud service now,
-  out of this repo's scope entirely.
+- **SSH private keys** — never touch this repo, not even encrypted. Copied in by hand on a new machine. See `ssh/README.md`.
+- A handful of apps with no Homebrew cask and no config to restore — see `docs/apps/` and `binary-apps/README.md`. Install is a manual drag to `/Applications` after `install-optional.sh` opens the download page.
+- Machine-migration backups (unpushed git branches, `.env` secrets) are scripts you run deliberately before wiping a machine, not part of `setup.sh` — see `scripts/backup_unpushed_repos.zsh`, `scripts/backup_dotenv_files.zsh`.
+- A full move to a new machine — workspace repos, SSH keys, Claude auto-memory, bundled into one passphrase-encrypted archive — see `docs/MACHINE_EXPORT.md`.
+- Scratch-workspace (`lixo`) backup lives in a personal cloud service now, out of this repo's scope entirely.
 
 ## Layout
 
@@ -61,27 +43,16 @@ apps in `binary-apps/`).
 
 ## Using the agents and skills
 
-`link.sh` only covers getting these onto disk in the right place — this is
-how to actually use them once they're there.
+`link.sh` only covers getting these onto disk in the right place — this is how to actually use them once they're there.
 
-- **Skills** (`skills/`) mostly load themselves — Claude Code picks the
-  relevant one based on what you're asking for (each `SKILL.md`'s
-  `description` is the trigger). You can also ask for one by name: "use the
-  dx skill to check this" or "load find-skills."
-- **Personas** (`agents/personas/`) are custom subagents — ask for one by
-  name and Claude Code dispatches it: "use the pr-auditor agent to review
-  DEV-580" or "use the verifier agent to double-check this fix." They don't
-  self-trigger the way skills do; you (or the main agent, when it judges one
-  fits) have to name one.
+- **Skills** (`skills/`) mostly load themselves — Claude Code picks the relevant one based on what you're asking for (each `SKILL.md`'s `description` is the trigger). You can also ask for one by name: "use the dx skill to check this" or "load find-skills."
+- **Personas** (`agents/personas/`) are custom subagents — ask for one by name and Claude Code dispatches it: "use the pr-auditor agent to review DEV-580" or "use the verifier agent to double-check this fix." They don't self-trigger the way skills do; you (or the main agent, when it judges one fits) have to name one.
 
-Full command reference and a worked full-stack example (`pr-auditor`
-assembling a cross-repo branch set from one ticket):
-`agents/personas/README.md`.
+Full command reference and a worked full-stack example (`pr-auditor` assembling a cross-repo branch set from one ticket): `agents/personas/README.md`.
 
 ## Testing
 
-No TDD requirement for this repo — every mutating script supports
-`--dry-run`, which is the safety net. Run any test file directly:
+No TDD requirement for this repo — every mutating script supports `--dry-run`, which is the safety net. Run any test file directly:
 
 ```sh
 ./tests/skills_sync_test.zsh
@@ -91,35 +62,20 @@ Full checklist for a from-scratch machine: `less docs/WORKSTATION_TODO.md`.
 
 ## tmux worktree workflow
 
-`sesh/` holds per-project tmux session launchers (`sesh.toml` plus one
-script per named session), symlinked whole-directory to `~/.config/sesh` by
-`link.sh`'s `link_sesh` — same pattern as `agents/personas` -> `~/.claude/agents`.
-Each script is a self-contained sesh `startup_command`: create/attach a
-named tmux session, split it into one pane per service, and (for services
-with a real dependency order — a database that must finish migrating before
-the API starts) sequence them with `tmux wait-for` rather than a sleep loop.
-See `agents/personas/local-stack-runner.md` for the general pattern behind
-these scripts (finding an existing launcher before writing a new one,
-avoiding tmux session-name collisions, when to use `wait-for` vs. a port-poll
-loop, why the launcher itself should never auto-sync a sibling repo's
-branch).
+`sesh/` holds per-project tmux session launchers (`sesh.toml` plus one script per named session), symlinked whole-directory to `~/.config/sesh` by `link.sh`'s `link_sesh` — same pattern as `agents/personas` -> `~/.claude/agents`. Each script is a self-contained sesh `startup_command`: create/attach a named tmux session, split it into one pane per service, and (for services with a real dependency order — a database that must finish migrating before the API starts) sequence them with `tmux wait-for` rather than a sleep loop. See `agents/personas/local-stack-runner.md` for the general pattern behind these scripts (finding an existing launcher before writing a new one, avoiding tmux session-name collisions, when to use `wait-for` vs. a port-poll loop, why the launcher itself should never auto-sync a sibling repo's branch).
 
-`workmux` drives git worktrees and tmux targets; the tmux layer here puts the
-same actions behind two discovery surfaces.
+`workmux` drives git worktrees and tmux targets; the tmux layer here puts the same actions behind two discovery surfaces.
 
 | Surface | Key | Behaviour |
 | --- | --- | --- |
 | Key table | `prefix + w` | Enters `worktree-mode`; the status bar renders the hints and the next key runs an action, then drops back to root. |
 | which-key | `C-Space` or `prefix + Space` | Popup menu, `w` opens `+Worktrees`. |
 
-Same keys in both: `a` add (new branch), `b` add (existing branch), `s` switch,
-`d` dashboard, `g` sidebar, `y` sync files, `r` remove, `m` merge, `l` list.
+Same keys in both: `a` add (new branch), `b` add (existing branch), `s` switch, `d` dashboard, `g` sidebar, `y` sync files, `r` remove, `m` merge, `l` list.
 
 Cheatsheet for all of this plus stock tmux bindings: `prefix + ?`.
 
-Per-repo behaviour comes from a `.workmux.yaml` at the repo root (`workmux init`
-writes a commented example): which files to copy, which to symlink, and the
-window/pane layout to open. Global settings live in `~/.config/workmux/config.yaml`.
+Per-repo behaviour comes from a `.workmux.yaml` at the repo root (`workmux init` writes a commented example): which files to copy, which to symlink, and the window/pane layout to open. Global settings live in `~/.config/workmux/config.yaml`.
 
 ```sh
 ./tests/tmux_worktree_test.zsh

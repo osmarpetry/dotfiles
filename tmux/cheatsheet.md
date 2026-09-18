@@ -20,9 +20,7 @@
 
 ## This repo's worktree layer
 
-Two ways to the same actions — `prefix w` for a one-shot key table (hints
-show in the status bar), or `C-Space` / `prefix Space` for the tmux-which-key
-popup menu (`w` for the `+Worktrees` submenu).
+Two ways to the same actions — `prefix w` for a one-shot key table (hints show in the status bar), or `C-Space` / `prefix Space` for the tmux-which-key popup menu (`w` for the `+Worktrees` submenu).
 
 | Key (after `prefix w`) | Action |
 |---|---|
