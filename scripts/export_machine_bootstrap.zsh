@@ -36,7 +36,7 @@ fi
 
 repo_count=$(find "$workspace" -maxdepth 3 -type d -name .git 2>/dev/null | wc -l | tr -d ' ')
 
-ssh_files=(id_ed25519 id_ed25519.pub config allowed_signers tempo_id_rsa tempo_id_rsa.pub)
+ssh_files=(id_ed25519 id_ed25519.pub config allowed_signers)
 ssh_present=()
 ssh_missing=()
 for f in "${ssh_files[@]}"; do

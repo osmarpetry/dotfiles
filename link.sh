@@ -29,7 +29,6 @@ link_ssh() {
   link "$DOTFILES/ssh/config" "$HOME/.ssh/config"
   link "$DOTFILES/ssh/allowed_signers" "$HOME/.ssh/allowed_signers"
   link "$DOTFILES/ssh/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub"
-  link "$DOTFILES/ssh/tempo_id_rsa.pub" "$HOME/.ssh/tempo_id_rsa.pub"
 }
 
 link_git() {

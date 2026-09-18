@@ -13,9 +13,8 @@ to create a second copy, and the manifests were regenerated with real paths.
 ## 2. SSH keys across machines — superseded
 
 Superseded: manual-only SSH, no ansible-vault. See `ssh/README.md` for the
-current approach (private keys never in the repo, `github-personal` /
-`github-work` Host aliases, `git/gitconfig`'s `includeIf`). The one part of
-this section that survived unchanged: SSH commit signing via
+current approach (private keys never in the repo). The one part of this
+section that survived unchanged: SSH commit signing via
 `ssh/allowed_signers` + `gpg.format = ssh` — that's live in `git/gitconfig`.
 
 ## 3. Dependabot across the fleet — still open, unblocked

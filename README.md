@@ -48,7 +48,7 @@ apps in `binary-apps/`).
 | `AGENTS.md` | Canonical agent working agreement — symlinked to both `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`, so Claude Code and Codex read the same file |
 | `agents/personas/` | Custom Claude Code subagents |
 | `skills/` | Vendored agent skills, symlinked into `~/.claude/skills/` |
-| `ssh/`, `git/` | SSH config/public keys, git config, personal/work identity split |
+| `ssh/`, `git/` | SSH config/public keys, git config |
 | `tmux/`, `nvim/`, `zsh/` | Per-tool config, each with its own README |
 | `aerospace/`, `hammerspoon/` | Window management, mic-pin, meeting reminders |
 | `zed/`, `clop/` | Minimal per-app setup |
@@ -77,12 +77,6 @@ how to actually use them once they're there.
 Full command reference and a worked full-stack example (`pr-auditor`
 assembling a cross-repo branch set from one ticket):
 `agents/personas/README.md`.
-
-## Personal vs. work identity
-
-Personal identity is the default everywhere. A work override only kicks in
-for anything cloned under `~/workspace/work/**`, via git's `includeIf` and a
-matching SSH Host alias. See `ssh/README.md` and `git/README.md`.
 
 ## Testing
 

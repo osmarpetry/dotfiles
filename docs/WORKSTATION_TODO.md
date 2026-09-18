@@ -78,22 +78,18 @@ Decision: approved
 
 ## Step 5: SSH — manual key transfer, no vault
 
-Todo 5.1 — Copy `~/.ssh/id_ed25519` and `~/.ssh/tempo_id_rsa` by hand
-(password manager, AirDrop, or a temporary HTTPS token for the first clone).
-Never through this repo, never encrypted-in-git. Decision: approved
+Todo 5.1 — Copy `~/.ssh/id_ed25519` by hand (password manager, AirDrop, or a
+temporary HTTPS token for the first clone). Never through this repo, never
+encrypted-in-git. Decision: approved
 
-Todo 5.2 — `link.sh` symlinks `ssh/config`, `ssh/allowed_signers`, and both
-`.pub` files into `~/.ssh/`. Decision: approved
+Todo 5.2 — `link.sh` symlinks `ssh/config`, `ssh/allowed_signers`, and the
+`.pub` file into `~/.ssh/`. Decision: approved
 
 Todo 5.3 — Set permissions: `.ssh` `0700`, private keys `0600` (do this by
 hand after copying the keys in). Decision: approved
 
 Todo 5.4 — Do not transfer GitHub CLI token/config; `gh auth login` again.
 Decision: approved
-
-Todo 5.5 — See `ssh/README.md` for the personal/work identity split
-(`github-personal` / `github-work` Host aliases, `git/gitconfig`'s
-`includeIf`). Decision: approved
 
 ## Step 6: Raycast minimal setup
 

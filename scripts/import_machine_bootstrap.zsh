@@ -47,7 +47,7 @@ if [ -d "$tmp/ssh" ]; then
     name="${f:t}"
     cp "$f" "$ssh_dir/$name"
     case "$name" in
-      id_ed25519|tempo_id_rsa) chmod 600 "$ssh_dir/$name" ;;
+      id_ed25519) chmod 600 "$ssh_dir/$name" ;;
     esac
     restored_ssh=$(( restored_ssh + 1 ))
   done

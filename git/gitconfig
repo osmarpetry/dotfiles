@@ -14,6 +14,3 @@
 	defaultBranch = main
 [pull]
 	rebase = false
-
-[includeIf "gitdir:~/workspace/work/**"]
-	path = ~/.gitconfig-work

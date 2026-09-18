@@ -14,7 +14,6 @@ binary-apps/archives/Qwen.app.zip
 # (git/hooks/pre-commit) is the real backstop.
 id_ed25519
 id_rsa
-tempo_id_rsa
 *.pem
 *.p12
 *.pfx

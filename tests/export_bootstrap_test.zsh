@@ -42,7 +42,6 @@ seed() {
   print -- "Host github" > "$SSH/real-config"
   ln -s "real-config" "$SSH/config"
   print -- "allowed signer" > "$SSH/allowed_signers"
-  # tempo_id_rsa / tempo_id_rsa.pub deliberately absent
 
   mkdir -p "$CLAUDE/-Users-test-projA/memory" "$CLAUDE/-Users-test-projB/memory"
   print -- "some memory" > "$CLAUDE/-Users-test-projA/memory/MEMORY.md"
@@ -68,8 +67,8 @@ print -r -- "$out" | grep -q 'summary:'
 check $? "dry run prints a summary"
 print -r -- "$out" | grep -q '1 repo'
 check $? "dry run counts exactly one repo (repo-a has .git, repo-b does not)"
-print -r -- "$out" | grep -q '4/6 ssh file'
-check $? "dry run counts 4 of 6 known ssh files present"
+print -r -- "$out" | grep -q '4/4 ssh file'
+check $? "dry run counts all 4 known ssh files present"
 print -r -- "$out" | grep -q '1 claude memory dir'
 check $? "dry run counts only the populated memory dir"
 
@@ -111,8 +110,6 @@ print -r -- "$listing" | grep -q 'ssh/config'
 check $? "archive contains the dereferenced config symlink"
 print -r -- "$listing" | grep -q 'ssh/allowed_signers'
 check $? "archive contains allowed_signers"
-! print -r -- "$listing" | grep -q 'tempo_id_rsa'
-check $? "archive excludes the tempo_id_rsa files that don't exist on this machine"
 
 print -r -- "$listing" | grep -q 'claude-memory/-Users-test-projA/memory/MEMORY.md'
 check $? "archive contains the populated memory dir under its project name"
