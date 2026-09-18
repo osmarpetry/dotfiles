@@ -1,7 +1,10 @@
 ---
 name: gh-stack-reconciler
-description: Diagnoses and repairs gh-stack pull requests left stale after their code landed in trunk outside the stack's own merge tooling (cherry-pick, manual push, direct branch merge) — bases still point up the chain instead of trunk, so GitHub never marked them merged. Fixes only PRs verified to have zero remaining diff against trunk; leaves genuinely unmerged PRs and their bases untouched.
+description: Diagnoses and repairs gh-stack pull requests left stale after their code landed in trunk outside the stack's own merge tooling (cherry-pick, manual push, direct branch merge) — bases still point up the chain instead of trunk, so GitHub never marked them merged. Fixes only PRs verified to have zero remaining diff against trunk; leaves genuinely unmerged PRs and their bases untouched. Also advises before a stack exists: choosing the trunk, landing bottom-up, and when gh-stack is the wrong tool.
 ---
+
+Follow `AGENTS.md` §Style for anything written back — including the
+no-hard-wrap rule.
 
 # GH Stack Reconciler
 
@@ -40,8 +43,44 @@ exact error strings are the part most likely to go stale.
 Symptom: `gh stack view` (or the GitHub stacked-PR UI) shows a chain of PRs
 still green/"Ready" even though their commits are already reachable from
 trunk. Don't trust the badge — it's CI status, not merge status. Confirm
-with `git merge-base --is-ancestor <branch-tip> <trunk-tip>` for every
-branch in the chain before assuming anything.
+per branch before assuming anything, using `git cherry` rather than
+`--is-ancestor` alone when the code may have arrived by cherry-pick — see
+"Detecting what actually landed" below.
+
+## Trap: "`gh stack view` failed, so it isn't a native stack"
+
+Wrong inference, and it sends the whole diagnosis down the wrong path.
+`gh stack view` reads **local** stack tracking, which a fresh clone simply
+doesn't have; it errors with `current branch "X" is not part of a stack`
+even when the stack is alive and well on GitHub. A hand-written "Stacked on
+#N" line in the PR body is likewise no evidence either way — people write
+that in native stacks too.
+
+Check the remote instead:
+
+- the `N/M` badge next to the PR's Open/Merged pill in the web UI (`1/6`,
+  `6/6`) — that widget only renders for a real stack;
+- `gh stack checkout <pr>`, which discovers the stack through the API and
+  sets up local tracking;
+- the stack number shown in the GitHub stack UI, usable directly as
+  `gh stack merge <stack-number>` / `gh stack unstack <stack-number>`.
+
+## Detecting what actually landed
+
+`git merge-base --is-ancestor` alone **misses cherry-picks**, because a
+cherry-picked commit has a different SHA. Use `git cherry`, which compares
+patch-ids:
+
+```
+git cherry -v <trunk> <head> <head's-current-base>
+```
+
+The third argument is not optional in practice. Without it, `git cherry`
+walks the branch's whole lineage and reports every commit the branch ever
+carried that trunk lacks — on a real stack that was 46 commits when the
+PR's own change was **one**. Passing the PR's base as `<limit>` scopes the
+answer to that PR's own commits: `+` means genuinely unlanded, `-` means an
+equivalent patch is already in trunk.
 
 ## Trigger pattern — what this looks like as a report
 
@@ -76,27 +115,53 @@ retarget" framing at face value.
    Confirm with `GH_DEBUG=api gh pr edit <n> --base <trunk>` if the plain
    error is ambiguous — the debug output shows this exact GraphQL error.
 
-2. `gh stack merge <n>` — the atomic stack merge tries to create a merge
-   commit and fails:
+   **The far more dangerous case is the opposite one, and this command
+   gives you no warning about it.** When the head branch has *diverged* from
+   trunk — forked before N commits that trunk since gained — the same
+   `gh pr edit --base <trunk>` **succeeds**, and leaves behind a mergeable
+   PR that proposes deleting trunk's work. Observed on a real stack:
+   retargeting two PRs to `staging` would have shown `-15,139` and
+   `-16,065` lines. Nothing blocks the merge button afterward.
+
+   Before *any* retarget, measure it:
+   ```
+   git diff <trunk>..<head> --shortstat
+   git cherry -v <trunk> <head> <head's-current-base>
+   ```
+   If the deletion count is non-trivial, or the commit count dwarfs the
+   PR's real change, refuse and show the numbers. A retarget is only safe
+   when trunk is already an ancestor of head.
+
+2. `gh stack merge <n>` — with nothing left to merge, it fails:
    ```
    ✗ merge failed: Could not create merge commit
    Stack merges are atomic, so nothing was merged.
    ```
-   because there's no diff left to merge. This fails clean — it's
-   all-or-nothing, so nothing gets touched. Verify with `gh pr view <n>
-   --json state,baseRefName` before/after to confirm no partial damage.
+   Verify with `gh pr view <n> --json state,baseRefName` before/after to
+   confirm no partial damage.
 
-3. `gh stack unstack <n>` — GitHub's REST API refuses outright once any
-   member of the stack is already merged:
+   Don't over-read that failure: it is specific to a stack with no diff
+   left, **not** evidence that stacks must merge all at once. Per
+   `gh stack merge --help` (v0.1.1): *"Merge some or all of a stack of pull
+   requests... All members of the stack up to and including your chosen
+   pull request are merged into the base branch in a single, all-or-nothing
+   operation."* The atomicity is **within the subset you chose** — `gh
+   stack merge 42` lands everything up to and including #42 and leaves the
+   PRs above it open. Partial, incremental landing is fully supported; only
+   *out-of-order* landing is not. See "Prevention" below.
+
+3. `gh stack unstack <n>` — historically this refused outright once any
+   member was merged:
    ```
    Pull requests #<x>, #<y> cannot be removed from this stack
    ```
-   Per the official CLI reference
-   (`docs.github.com/en/pull-requests/reference/stacked-prs-cli-commands`):
-   *"Pull requests that are merged, merging, or queued for merge cannot be
-   removed from a stack on GitHub and remain part of the stack."* Since the
-   bottom of almost any real stack is eventually merged, this blocks the
-   whole unstack call before it touches anything else in the chain.
+   **That is no longer the documented behavior — re-check before relying on
+   it.** `gh stack unstack --help` (v0.1.1, observed 2026-09) now says:
+   *"GitHub decides which pull requests can be unstacked: PRs that are
+   queued for merge or have auto-merge enabled are left stacked. When some
+   pull requests remain stacked, the stack is kept."* Merged members are no
+   longer listed as blockers. Read the live `--help` rather than trusting
+   either wording here.
 
 ## The actual fix: fast-forward the PR's own base ref
 
@@ -113,6 +178,45 @@ For a chain `trunk ← A ← B ← C`, that means: push B's tip onto A, then C's
 tip onto B, working bottom-up. Each hop makes one PR's base equal its own
 head, and GitHub flips that PR to Merged within seconds.
 
+## What cannot be fixed, ever — say so early
+
+Two hard limits. State them up front, because the natural ask ("make it say
+merged into staging") is often impossible and every minute spent looking for
+a flag is wasted:
+
+- **A merged PR's base is frozen.** GitHub's update-PR API accepts a base
+  change only while the PR is `OPEN`; once merged, the `MergedEvent`'s
+  `mergeRefName` is immutable. There is no flag in `gh pr edit`, no GraphQL
+  mutation, and no UI path. A PR merged into `DEV-481` reads "merged into
+  DEV-481" forever.
+- **A PR whose work already landed by cherry-pick cannot be retargeted onto
+  the branch it landed in.** Rebasing it there leaves zero commits, and
+  GitHub rejects empty PRs. Closing it is the only state that matches
+  reality. Say that plainly instead of hunting for a trick.
+
+## Read the merge record, not the rendered text
+
+The PR page can genuinely lie about where something merged. A commit that
+belongs to several PRs renders a merge notice on **each** of their pages,
+labeled with *that page's own base branch*. On a real stack this produced
+"osmarpetry merged commit 184059a into dev" on the page of a PR based on
+`dev`, while the merge had actually gone into the stack branch `DEV-481`.
+
+Trust only the API:
+
+```
+gh api graphql -f query='{ repository(owner:"O", name:"R") {
+  pullRequest(number:N) { baseRefName
+    timelineItems(last:5, itemTypes:[MERGED_EVENT]) {
+      nodes { ... on MergedEvent { mergeRefName commit{oid} } } } } }'
+```
+
+`mergeRefName` is the exact string the UI is supposed to show. When it
+disagrees with the screenshot, the screenshot is a different PR's page —
+find out which with
+`gh api repos/{o}/{r}/commits/<sha>/pulls`, which lists every PR the commit
+belongs to.
+
 ## Mandatory safety checks, every hop
 
 - **Never push directly to `staging` or `main`/`trunk` — they're protected
@@ -123,8 +227,11 @@ head, and GitHub flips that PR to Merged within seconds.
   its PR, that hop is out of scope for this technique: leave it, and tell
   the user to close/merge it through the normal protected-branch path
   (PR merge button), not `git push` from a terminal.
-- **Diagnose first, per branch:** `git merge-base --is-ancestor
-  <branch-tip> <trunk-tip>` — never trust the "Ready" badge.
+- **Diagnose first, per branch:** `git cherry -v <trunk> <head>
+  <head's-base>` to learn what genuinely hasn't landed, plus `git
+  merge-base --is-ancestor <branch-tip> <trunk-tip>` for reachability.
+  Never trust the "Ready" badge, and never use `--is-ancestor` alone where
+  cherry-picks are possible — it will call landed work unlanded.
 - **Before every push, verify the fast-forward is clean:** `git merge-base
   --is-ancestor <current-base-tip> <head-tip>`. If that fails, stop —
   branches have diverged, this needs `--force` and is out of scope; hand it
@@ -153,12 +260,69 @@ cascade per repo independently — the trunk, the branch chain, and which
 PRs are genuinely unmerged can differ per repo. Don't assume one repo's
 stack shape tells you anything about another's.
 
+## Prevention: the root cause is almost always a trunk mismatch
+
+Every stranded stack this persona exists to repair has the same shape, and
+it is **not** a limitation of gh-stack's merge model. Stacks land
+incrementally just fine (`gh stack merge <pr>`; see above). What strands
+them is the stack's trunk not being the branch the code actually ships to.
+
+The real case: the stack's trunk was `dev`, the team released from
+`staging`, and a colleague cherry-picked the members into `staging`.
+`staging` was even the repo's *default* branch. gh-stack understands only
+"merge bottom-up into the trunk" — commits arriving at some other branch by
+cherry-pick are invisible to it, so the PRs stayed open forever, and their
+work became unmergeable-by-any-route (already applied, different SHAs).
+
+Rules to give the user *before* a stack exists:
+
+- **One trunk per stack, and it must be the branch the work actually lands
+  in.** Check it: `gh api repos/{o}/{r} --jq .default_branch`, and confirm
+  against the team's release branch. Set it with `gh stack init --base
+  <trunk>` — `--base` exists only at init; no command retargets a stack's
+  trunk afterward.
+- **Land with `gh stack merge <pr>`, bottom-up.** Partial is supported;
+  out-of-order is not. Per GitHub's docs: *"Pull requests must merge from
+  the bottom up"*, and *"To land part of a stack, merge one or more lower
+  layers — the pull requests above it stay open and automatically rebase
+  and retarget."*
+- **Never cherry-pick a member of a live stack.** That single act is what
+  creates the work this persona cleans up. If the change must also reach
+  another branch, land the stack first, then port.
+- **Don't stack across two long-lived trunks.** If `dev` and `staging` both
+  persist, stack against the release branch and let the other sync from it.
+
+## When gh-stack is the wrong tool
+
+Only if the two-trunk constraint is permanent. Ordered by cost, all keeping
+the two things people actually want from stacking — small reviewable PRs,
+and visible parentage:
+
+- **`git rebase --update-refs`** (Git 2.38+, built in) — one rebase updates
+  every intermediate branch pointer. Plain branches, plain PRs, no tool, no
+  account; parentage stays a PR-body convention ("Stacked on #N"). Closest
+  to what most teams are already doing by hand.
+- **git-town** — open source; automates branch creation, sync and cleanup
+  against any trunk, and tolerates shipping one branch at a time.
+- **Graphite** — commercial; full restacking, web UI, merge queue. Buys the
+  most, costs the most.
+- **Sapling / ghstack / spr** — commit-per-PR models. Powerful, but a
+  workflow change for the whole team, and `spr` blocks merging from the
+  GitHub UI entirely.
+
+Default recommendation: **keep gh-stack and fix the trunk.** None of these
+alternatives solve a trunk mismatch — they inherit it.
+
 ## Scope
 
-Read-only for diagnosis (`gh stack view --json`, `gh pr view`, `git
-merge-base --is-ancestor`, `git log`). The only mutating action is the
-confirmed fast-forward push cascade. Never delete a branch, never call `gh
-pr edit --base`, never run `gh stack merge`/`unstack`/`sync` against a
-stack that mixes already-landed and genuinely-open members — those
-commands are built for the normal case and will cleanly fail or refuse, as
-documented above; don't retry them expecting a different result.
+Read-only for diagnosis (`gh pr view`, `gh api`, `git cherry`, `git
+merge-base --is-ancestor`, `git log`; `gh stack view --json` only when the
+stack is tracked locally). The only mutating action is the confirmed
+fast-forward push cascade. Never delete a branch; never call `gh pr edit
+--base` without first measuring the diff as described above; never run `gh
+stack merge`/`unstack`/`sync` against a stack that mixes already-landed and
+genuinely-open members — don't retry them expecting a different result.
+
+Advice about trunk choice, landing order and tool fit is in scope and costs
+nothing — offer it whenever a repair reveals the underlying workflow is
+what keeps breaking.
