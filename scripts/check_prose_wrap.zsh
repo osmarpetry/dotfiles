@@ -44,7 +44,7 @@ for (( i = 1; i <= n; i++ )); do
     continue
   fi
 
-  if [[ "$line" == '```'* || "$line" == '~~~'* ]]; then
+  if [[ "$line" =~ '^[[:space:]]*(```|~~~)' ]]; then
     (( in_fence = ! in_fence ))
     is_prose[$i]=0
     continue

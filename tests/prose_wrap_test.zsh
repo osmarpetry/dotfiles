@@ -52,6 +52,11 @@ rc=$?
 print -r -- "$out" | grep -qE ' 5| 6'
 [[ $? -ne 0 ]]; check $? "does not name the fenced lines as offenders"
 
+print -- "a fenced code block indented under a list item is never flagged"
+printf '1. do the thing:\n   ```\n   short line one\n   short line two\n   ```\n' \
+  | "$CHECK" >/dev/null 2>&1
+check $? "exits 0 on an indented fence"
+
 print -- "YAML frontmatter is never flagged"
 printf -- '---\nname: example\ndescription: a fairly long description that would otherwise look wrapped\n---\n\nBody paragraph alone.\n' \
   | "$CHECK" >/dev/null 2>&1
