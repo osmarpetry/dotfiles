@@ -35,6 +35,9 @@ apps in `binary-apps/`).
   scripts you run deliberately before wiping a machine, not part of
   `setup.sh` — see `scripts/backup_unpushed_repos.zsh`,
   `scripts/backup_dotenv_files.zsh`.
+- A full move to a new machine — workspace repos, SSH keys, Claude
+  auto-memory, bundled into one passphrase-encrypted archive — see
+  `docs/MACHINE_EXPORT.md`.
 - Scratch-workspace (`lixo`) backup lives in a personal cloud service now,
   out of this repo's scope entirely.
 
