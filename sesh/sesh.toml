@@ -1,0 +1,19 @@
+strict_mode = true
+sort_order = ["config", "tmux"]
+
+[tui]
+prompt = "sesh> "
+placeholder = "Filter sessions..."
+show_icons = false
+
+[[session]]
+name = "deelan-dev"
+path = "/Users/osmar/workspace/deelan"
+startup_command = "/Users/osmar/.config/sesh/deelan-dev.sh"
+preview_command = "printf 'Deelan dev session\\n\\nOne tmux window: dev\\n  top-left: backend after Supabase start + local migrations\\n  top-right: Nuxt frontend\\n  bottom: ngrok webhook tunnel\\n'"
+
+[[session]]
+name = "deelan-full"
+path = "/Users/osmar/workspace/deelan"
+startup_command = "/Users/osmar/.config/sesh/deelan-full.sh"
+preview_command = "printf 'Deelan full-stack session\\n\\nOne tmux window: dev, 5 tiled panes\\n  frontend: Nuxt dev server\\n  supabase: local Supabase start + migrations + vault wiring\\n  temporal: local Temporal dev server\\n  backend: FastAPI, waits for Supabase\\n  worker: Temporal worker, waits for Supabase + Temporal\\n'"

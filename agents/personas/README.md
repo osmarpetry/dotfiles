@@ -23,6 +23,7 @@ the `name:` field does. Current personas:
 | `pr-auditor` | Read-only on GitHub/the tracker (does check branches out locally): prioritize open PRs across repos, assemble and check out a ticket's full cross-repo branch set, or deep-review one PR against its linked ticket. |
 | `gh-stack-reconciler` | Read-only diagnosis, confirmed fast-forward pushes: fixes gh-stack PRs stuck open because their code landed in trunk outside the stack's own merge tooling. |
 | `nuxt-ui-migration-reviewer` | Review a Nuxt UI major-version migration for silent regressions (renamed props, `:ui` slot drift, color/variant remaps, `v-model` mismatches), grounded in `dx doc nuxt-ui` and the installed theme source. Also fixes GitHub PR body Markdown (hard-wrap vs. GitHub's line-break rendering). |
+| `local-stack-runner` | Set up or extend a project's local multi-service dev stack as a sesh+tmux launcher — reuses existing launch mechanisms before inventing new ones, sequences dependent services with `tmux wait-for`/port polling, checks for tmux session-name collisions first, never bakes a branch sync into the reusable script. |
 
 ### `pr-auditor` walkthrough — a full-stack project
 

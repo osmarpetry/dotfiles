@@ -97,7 +97,18 @@ Full checklist for a from-scratch machine: `less docs/WORKSTATION_TODO.md`.
 
 ## tmux worktree workflow
 
-TODO: sesh be in dotfiles instead of .config, as symbolic links
+`sesh/` holds per-project tmux session launchers (`sesh.toml` plus one
+script per named session), symlinked whole-directory to `~/.config/sesh` by
+`link.sh`'s `link_sesh` — same pattern as `agents/personas` -> `~/.claude/agents`.
+Each script is a self-contained sesh `startup_command`: create/attach a
+named tmux session, split it into one pane per service, and (for services
+with a real dependency order — a database that must finish migrating before
+the API starts) sequence them with `tmux wait-for` rather than a sleep loop.
+See `agents/personas/local-stack-runner.md` for the general pattern behind
+these scripts (finding an existing launcher before writing a new one,
+avoiding tmux session-name collisions, when to use `wait-for` vs. a port-poll
+loop, why the launcher itself should never auto-sync a sibling repo's
+branch).
 
 `workmux` drives git worktrees and tmux targets; the tmux layer here puts the
 same actions behind two discovery surfaces.

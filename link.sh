@@ -42,6 +42,10 @@ link_tmux() {
   link "$DOTFILES/tmux/cheatsheet.md" "$HOME/.config/tmux/cheatsheet.md"
 }
 
+link_sesh() {
+  link "$DOTFILES/sesh" "$HOME/.config/sesh"
+}
+
 link_nvim() {
   confirm_dir "$HOME/.config/nvim/lua/config"
   confirm_dir "$HOME/.config/nvim/lua/plugins"
@@ -106,6 +110,7 @@ link_skills
 link_ssh
 link_git
 link_tmux
+link_sesh
 link_nvim
 link_zsh
 link_dx
