@@ -22,6 +22,7 @@ the `name:` field does. Current personas:
 | `issue-auditor` | Read-only: is a reported issue still valid against current code, find related PRs. |
 | `pr-auditor` | Read-only on GitHub/the tracker (does check branches out locally): prioritize open PRs across repos, assemble and check out a ticket's full cross-repo branch set, or deep-review one PR against its linked ticket. |
 | `gh-stack-reconciler` | Read-only diagnosis, confirmed fast-forward pushes: fixes gh-stack PRs stuck open because their code landed in trunk outside the stack's own merge tooling. |
+| `nuxt-ui-migration-reviewer` | Review a Nuxt UI major-version migration for silent regressions (renamed props, `:ui` slot drift, color/variant remaps, `v-model` mismatches), grounded in `dx doc nuxt-ui` and the installed theme source. Also fixes GitHub PR body Markdown (hard-wrap vs. GitHub's line-break rendering). |
 
 ### `pr-auditor` walkthrough — a full-stack project
 
