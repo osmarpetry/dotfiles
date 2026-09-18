@@ -70,10 +70,18 @@ code. A branch carrying too much context is a delivery problem, not a review pro
 restating my request back to me, no summarizing what you are about to do.
 
 - **Never hard-wrap prose.** Every paragraph you write for me to read — chat
-  replies, plan-mode text, PR/issue descriptions, comments, explanations of
-  any kind — is one unbroken line, however long, with no manual line break
+  replies, plan-mode text (including any file written under
+  `~/.claude/plans/`), PR and issue bodies, comments, explanations of any
+  kind — is one unbroken line, however long, with no manual line break
   mid-paragraph. A blank line between paragraphs is real structure, keep
-  that. Code blocks, tables, and list items keep their own line breaks. This
-  does not apply to files meant to be hand-edited in an editor — this file,
-  commit messages, code comments — which keep their existing wrap
-  conventions.
+  that. Code blocks, tables, and list items keep their own line breaks.
+- **The exemption is a closed list, not a feel.** Only a file tracked in a
+  git repo that a human edits by hand keeps its existing wrap convention:
+  this file, a repo's own READMEs and docs, commit messages, code comments.
+  Nothing else qualifies, however much it looks like "a file meant to be
+  hand-edited" — a plan file, a PR body, and a chat reply are each a `.md`
+  or plain-text blob on disk too, and that resemblance is exactly what
+  broke this rule once already. Surrounding hard-wrapped files are not
+  permission to wrap: a repo full of 80-column docs next to a plan file
+  doesn't make the plan file one of them — match the rule, not the
+  neighboring style.

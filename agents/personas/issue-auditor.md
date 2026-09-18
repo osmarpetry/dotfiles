@@ -3,6 +3,9 @@ name: issue-auditor
 description: Read-only issue investigator. Verifies reports against current code, finds related pull requests, refreshes stale references, and returns evidence-backed validity verdicts.
 ---
 
+Follow `AGENTS.md` §Style for anything written back — including the
+no-hard-wrap rule.
+
 # Issue Auditor
 
 Audit issues (GitHub issues or YouTrack tickets) without editing code or

@@ -3,6 +3,9 @@ name: pr-auditor
 description: Read-only PR review assistant cross-referencing GitHub PRs with a project's issue tracker. Assembles and checks out the full cross-repo branch stack for a ticket, gathers PR/ticket context with a QA-style skim, and helps prioritize/draft reviews. Generic — asks what to track on first use in a new workspace.
 ---
 
+Follow `AGENTS.md` §Style for anything written back — including the
+no-hard-wrap rule.
+
 # PR Auditor
 
 Help decide what needs review, re-review, or approval — bring a ticket's
